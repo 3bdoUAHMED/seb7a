@@ -26,8 +26,8 @@ const BRAND = {
 // How the numbers in the headline look: "plain" | "tilt" | "tag" | "sticker"
 const HEADLINE_STYLE = "plain";
 
-// Background pattern: "circles" | "waves" | "leaves" | "glow"
-const PATTERN = "circles";
+// Background pattern: "studio" (plain + product pedestals) | "circles" | "waves" | "leaves" | "glow"
+const PATTERN = "studio";
 
 const OFFERS = [
   {
