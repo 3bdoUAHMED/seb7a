@@ -41,7 +41,7 @@ const OFFERS = [
  },
   {
     id: "offer-2",
-    theme: { from: "#0a1a4f", to: "#1d4ed8", accent: "#ffd166", text: "#ffffff" },
+    theme: { from: "#3d0a17", to: "#800020", accent: "#e9c46a", text: "#ffffff" },
     badge: { en: "LIMITED TIME", ar: "لفترة محدودة" },
     headline: { en: "Buy 2 Get 2", ar: "اشترِ 2 واحصل على 2" },
     sub: { en: "On Bioxcin hair care favourites", ar: "على منتجات بيوكسين للعناية بالشعر" },
@@ -75,12 +75,12 @@ const OFFERS = [
   },
 ];
 
-// Banner slots from the upload screen. maxProducts = how many products fit.
+// Banner slots from the upload screen. maxProducts = max products shown (layouts handle 1-8).
 const SIZES = [
   { id: "mobile-vertical-hero", device: "mobile", label: "Vertical Hero Banner", w: 800, h: 1200, maxProducts: 8 },
-  { id: "mobile-hero", device: "mobile", label: "Hero Banner", w: 706, h: 320, maxProducts: 3 },
-  { id: "mobile-slim", device: "mobile", label: "Slim Banner", w: 800, h: 200, maxProducts: 3 },
-  { id: "desktop-hero", device: "desktop", label: "Hero Banner", w: 1440, h: 300, maxProducts: 6 },
+  { id: "mobile-hero", device: "mobile", label: "Hero Banner", w: 706, h: 320, maxProducts: 8 },
+  { id: "mobile-slim", device: "mobile", label: "Slim Banner", w: 800, h: 200, maxProducts: 8 },
+  { id: "desktop-hero", device: "desktop", label: "Hero Banner", w: 1440, h: 300, maxProducts: 8 },
 ];
 
 const LANGS = ["en", "ar"];
