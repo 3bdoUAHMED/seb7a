@@ -353,3 +353,10 @@ img.logo { object-fit: contain; }
 .mobile-vertical-hero.pat-studio:not(.many) .product-media::after { left: 8%; width: 84%; }
 .mobile-vertical-hero.pat-studio:not(.many) .product-name { margin-top: 46px; }
 .mobile-vertical-hero.pat-studio.n4 .product-media { height: 200px; }
+.mobile-vertical-hero[dir="rtl"] .headline { white-space: normal; }
+.mobile-vertical-hero.n3 .products { gap: 30px; }
+.mobile-vertical-hero.n3 .product { width: 210px; }
+.mobile-vertical-hero.n3 .product-media { width: 210px; height: 440px; }
+.mobile-vertical-hero.n3 .product:nth-child(2) .product-media { height: 440px; }
+.mobile-hero .product-media img, .mobile-slim .product-media img { transform: scale(min(var(--z, 1), 1.15)); }
+.mobile-hero.n3 .product + .product { margin-inline-start: 4px; }
