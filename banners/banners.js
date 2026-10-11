@@ -13,6 +13,11 @@ function txt(s, numClass = "") {
   return esc(s).replace(/[0-9][0-9.,]*(?:\s?%)?/g, (m) => `<span dir="ltr"${cls}>${m}</span>`);
 }
 
+// Keeps "Bio-Activ" / "بيو أكتيف" from breaking across two lines.
+function keepTogether(name) {
+  return name.replace(/Bio-Activ/g, "Bio\u2011Activ").replace(/بيو أكتيف/g, "بيو\u00a0أكتيف");
+}
+
 // Simple bottle drawing used until a real product photo is set.
 
 function placeholderProduct(name, theme, i) {
@@ -42,7 +47,7 @@ function productHTML(p, offer, lang, i, showName) {
   return `
     <div class="product" style="--s:${p.scale ?? 1};--z:${p.zoom ?? 1}">
       <div class="product-media">${media}</div>
-      ${showName ? `<div class="product-name">${txt(name)}</div>${price}` : ""}
+      ${showName ? `<div class="product-name">${txt(keepTogether(name))}</div>${price}` : ""}
     </div>`;
 }
 
