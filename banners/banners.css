@@ -217,3 +217,18 @@ img.logo { object-fit: contain; }
 .desktop-hero.n7 .product, .desktop-hero.n8 .product { width: 100px; }
 .desktop-hero.n7 .product-media, .desktop-hero.n8 .product-media { width: 96px; height: 220px; }
 .desktop-hero.n7 .product-name, .desktop-hero.n8 .product-name { display: none; }
+
+/* products stand on one baseline; --s sizes each relative to the tallest */
+.product-media img { height: calc(var(--s, 1) * 100%); object-position: bottom; }
+.desktop-hero .products::after, .mobile-hero .products::after, .mobile-slim .products::after {
+  content: ""; position: absolute; z-index: -1; left: 4%; right: 4%; bottom: 8px; height: 26px;
+  background: radial-gradient(closest-side, rgba(0,0,0,.35), transparent); pointer-events: none;
+}
+.product-media { position: relative; }
+.product-media::after {
+  content: ""; position: absolute; z-index: -1; left: 10%; right: 10%; bottom: -6px; height: 12px;
+  background: radial-gradient(closest-side, rgba(0,0,0,.45), transparent);
+}
+/* names reserve two lines so every product in a row stands on the same baseline */
+.mobile-vertical-hero .product { align-self: stretch; justify-content: flex-end; }
+.mobile-vertical-hero .product-name { min-height: 2.5em; display: flex; align-items: flex-start; justify-content: center; }
