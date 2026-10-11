@@ -23,6 +23,9 @@ const BRAND = {
   name: { en: "", ar: "" }, // e.g. { en: "My Store", ar: "اسم المتجر" } — empty = no logo
 };
 
+// How the numbers in the headline look: "plain" | "tilt" | "tag" | "sticker"
+const HEADLINE_STYLE = "plain";
+
 const OFFERS = [
   {
     id: "offer-1",
