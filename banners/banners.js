@@ -6,11 +6,14 @@ function esc(s) {
   return String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 }
 
-// Simple bottle drawing used until a real product photo is set.
 // Escapes text and keeps numbers like "40%" left-to-right inside Arabic text.
-function txt(s) {
-  return esc(s).replace(/[0-9][0-9.,]*(?:\s?%)?/g, (m) => `<span dir="ltr">${m}</span>`);
+// numClass styles those numbers (used to make the discount pop in headlines).
+function txt(s, numClass = "") {
+  const cls = numClass ? ` class="${numClass}"` : "";
+  return esc(s).replace(/[0-9][0-9.,]*(?:\s?%)?/g, (m) => `<span dir="ltr"${cls}>${m}</span>`);
 }
+
+// Simple bottle drawing used until a real product photo is set.
 
 function placeholderProduct(name, theme, i) {
   const caps = [theme.accent, "#ffffff", theme.to, theme.from];
@@ -63,7 +66,7 @@ function bannerHTML(offer, size, lang) {
       <div class="copy">
         ${logoHTML(lang)}
         <div class="badge">${txt(offer.badge[lang])}</div>
-        <h2 class="headline">${txt(offer.headline[lang])}</h2>
+        <h2 class="headline">${txt(offer.headline[lang], "hl-num")}</h2>
         <p class="sub">${txt(offer.sub[lang])}</p>
         <div class="actions">
           <span class="cta">${txt(offer.cta[lang])}<span class="arrow">${lang === "ar" ? "←" : "→"}</span></span>
