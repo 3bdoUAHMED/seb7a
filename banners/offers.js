@@ -26,6 +26,9 @@ const BRAND = {
 // How the numbers in the headline look: "plain" | "tilt" | "tag" | "sticker"
 const HEADLINE_STYLE = "plain";
 
+// Background pattern: "circles" | "waves" | "leaves" | "glow"
+const PATTERN = "circles";
+
 const OFFERS = [
   {
     id: "offer-1",

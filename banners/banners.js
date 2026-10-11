@@ -59,7 +59,7 @@ function bannerHTML(offer, size, lang) {
   const showNames = size.id === "mobile-vertical-hero" || size.id === "desktop-hero";
   const code = offer.code?.[lang];
   return `
-    <div class="banner ${size.id} hl-${window.HL_STYLE || HEADLINE_STYLE} n${products.length}${products.length >= 5 ? " many" : ""}" dir="${lang === "ar" ? "rtl" : "ltr"}" lang="${lang}"
+    <div class="banner ${size.id} hl-${window.HL_STYLE || HEADLINE_STYLE} pat-${window.PATTERN_OVERRIDE || PATTERN} n${products.length}${products.length >= 5 ? " many" : ""}" dir="${lang === "ar" ? "rtl" : "ltr"}" lang="${lang}"
          data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png"
          style="width:${size.w}px;height:${size.h}px;--from:${t.from};--to:${t.to};--accent:${t.accent};--text:${t.text}">
       <div class="deco deco-1"></div><div class="deco deco-2"></div><div class="deco deco-3"></div>
