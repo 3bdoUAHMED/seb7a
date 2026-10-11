@@ -37,7 +37,7 @@ function productHTML(p, offer, lang, i, showName) {
     ? `<div class="price">${p.oldPrice ? `<s>${esc(p.oldPrice)}</s>` : ""}<b>${esc(p.price)}</b></div>`
     : "";
   return `
-    <div class="product" style="--s:${p.scale ?? 1}">
+    <div class="product" style="--s:${p.scale ?? 1};--z:${p.zoom ?? 1}">
       <div class="product-media">${media}</div>
       ${showName ? `<div class="product-name">${txt(name)}</div>${price}` : ""}
     </div>`;

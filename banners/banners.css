@@ -232,3 +232,4 @@ img.logo { object-fit: contain; }
 /* names reserve two lines so every product in a row stands on the same baseline */
 .mobile-vertical-hero .product { align-self: stretch; justify-content: flex-end; }
 .mobile-vertical-hero .product-name { min-height: 2.5em; display: flex; align-items: flex-start; justify-content: center; }
+.product-media img { transform: scale(var(--z, 1)); transform-origin: bottom center; }
