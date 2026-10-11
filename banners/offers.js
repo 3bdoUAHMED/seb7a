@@ -38,27 +38,28 @@ const OFFERS = [
       { name: { en: "Quantum Bio-Activ Serum", ar: "سيروم كوانتم بيو أكتيف" }, image: "products/bioxcin-quantum-serum.png", price: "", oldPrice: "" },
       { name: { en: "Eyelash & Eyebrow Serum", ar: "سيروم الرموش والحواجب" }, image: "products/bioxcin-eyelash-serum.png", price: "", oldPrice: "" },
     ],
- },
+  },
   {
     id: "offer-2",
-    theme: { from: "#3d0a17", to: "#800020", accent: "#e9c46a", text: "#ffffff" },
+    theme: { from: "#7a2034", to: "#b23a55", accent: "#f2cf7a", text: "#ffffff" },
     badge: { en: "LIMITED TIME", ar: "لفترة محدودة" },
     headline: { en: "Buy 2 Get 2", ar: "اشترِ 2 واحصل على 2" },
     sub: { en: "On Bioxcin hair care favourites", ar: "على منتجات بيوكسين للعناية بالشعر" },
     cta: { en: "Shop Now", ar: "تسوّق الآن" },
     code: { en: "", ar: "" },
-    // Each row of 4 runs small → large → large → small; "scale" = height relative to the tallest.
+    // Grouped: serum + the three 300ml shampoos (white, blue, red), then the two anti-dandruff
+    // shampoos side by side, then eyelash serum + Quantum box. "scale" = height vs the tallest.
     products: [
       { name: { en: "Forte Herbal Serum", ar: "سيروم فورت العشبي" }, image: "products/bioxcin-forte-serum.png", scale: 0.72, price: "", oldPrice: "" },
-      { name: { en: "Black Garlic Shampoo", ar: "شامبو الثوم الأسود" }, image: "products/bioxcin-black-garlic-shampoo.png", scale: 0.84, price: "", oldPrice: "" },
-      { name: { en: "Anti-Dandruff Thermal Shampoo", ar: "شامبو حراري ضد القشرة" }, image: "products/bioxcin-anti-dandruff-shampoo.png", scale: 1, price: "", oldPrice: "" },
-      { name: { en: "Eyelash & Eyebrow Serum", ar: "سيروم الرموش والحواجب" }, image: "products/bioxcin-eyelash-serum.png", scale: 0.78, price: "", oldPrice: "" },
-      { name: { en: "Anti-Dandruff DS Shampoo", ar: "شامبو DS المكثف ضد القشرة" }, image: "products/bioxcin-anti-dandruff-ds-shampoo.png", scale: 0.8, price: "", oldPrice: "" },
+      { name: { en: "Black Garlic Shampoo", ar: "شامبو الثوم الأسود" }, image: "products/bioxcin-black-garlic-shampoo.png", scale: 0.86, price: "", oldPrice: "" },
       { name: { en: "Quantum Bio-Activ Shampoo", ar: "شامبو كوانتم بيو أكتيف" }, image: "products/bioxcin-quantum-shampoo.png", scale: 0.86, price: "", oldPrice: "" },
       { name: { en: "Forte Herbal Shampoo", ar: "شامبو فورت العشبي" }, image: "products/bioxcin-forte-shampoo.png", scale: 0.86, price: "", oldPrice: "" },
+      { name: { en: "Anti-Dandruff Thermal Shampoo", ar: "شامبو حراري ضد القشرة" }, image: "products/bioxcin-anti-dandruff-shampoo.png", scale: 1, price: "", oldPrice: "" },
+      { name: { en: "Anti-Dandruff DS Shampoo", ar: "شامبو DS المكثف ضد القشرة" }, image: "products/bioxcin-anti-dandruff-ds-shampoo.png", scale: 0.8, price: "", oldPrice: "" },
+      { name: { en: "Eyelash & Eyebrow Serum", ar: "سيروم الرموش والحواجب" }, image: "products/bioxcin-eyelash-serum.png", scale: 0.78, price: "", oldPrice: "" },
       { name: { en: "Quantum Bio-Activ Serum", ar: "سيروم كوانتم بيو أكتيف" }, image: "products/bioxcin-quantum-serum.png", scale: 0.62, price: "", oldPrice: "" },
     ],
-},
+  },
   {
     id: "offer-3",
     theme: { from: "#0f5132", to: "#198754", accent: "#ffc107", text: "#ffffff" },

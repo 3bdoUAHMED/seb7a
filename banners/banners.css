@@ -53,7 +53,7 @@ img.logo { object-fit: contain; }
 .product { display: flex; flex-direction: column; align-items: center; text-align: center; }
 .product-media {
   display: flex; align-items: flex-end; justify-content: center;
-  filter: drop-shadow(0 10px 14px rgba(0,0,0,.28));
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,.14));
 }
 .product-media img, .product-media svg { height: 100%; width: 100%; object-fit: contain; }
 .product-name { font-weight: 600; line-height: 1.2; }
@@ -222,12 +222,12 @@ img.logo { object-fit: contain; }
 .product-media img { height: calc(var(--s, 1) * 100%); object-position: bottom; }
 .desktop-hero .products::after, .mobile-hero .products::after, .mobile-slim .products::after {
   content: ""; position: absolute; z-index: -1; left: 4%; right: 4%; bottom: 8px; height: 26px;
-  background: radial-gradient(closest-side, rgba(0,0,0,.35), transparent); pointer-events: none;
+  background: radial-gradient(closest-side, rgba(0,0,0,.14), transparent); pointer-events: none;
 }
 .product-media { position: relative; }
 .product-media::after {
   content: ""; position: absolute; z-index: -1; left: 10%; right: 10%; bottom: -6px; height: 12px;
-  background: radial-gradient(closest-side, rgba(0,0,0,.45), transparent);
+  background: radial-gradient(closest-side, rgba(0,0,0,.18), transparent);
 }
 /* names reserve two lines so every product in a row stands on the same baseline */
 .mobile-vertical-hero .product { align-self: stretch; justify-content: flex-end; }
