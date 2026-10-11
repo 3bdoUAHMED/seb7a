@@ -150,3 +150,34 @@ img.logo { object-fit: contain; }
 .mobile-vertical-hero .deco-1 { width: 900px; height: 900px; left: -50px; bottom: -520px; }
 .mobile-vertical-hero .deco-2 { width: 520px; height: 520px; inset-inline-end: -220px; top: -160px; }
 .mobile-vertical-hero .deco-3 { width: 26px; height: 26px; inset-inline-start: 80px; top: 420px; }
+
+/* five products */
+.desktop-hero.n5 { gap: 24px; }
+.desktop-hero.n5 .copy { flex-basis: 470px; }
+.desktop-hero.n5 .products { gap: 14px; }
+.desktop-hero.n5 .product { width: 140px; }
+.desktop-hero.n5 .product-media { width: 124px; }
+.desktop-hero.n5 .product-name { font-size: 13px; }
+.mobile-vertical-hero.n5 .products { gap: 18px 20px; }
+.mobile-vertical-hero.n5 .product { width: 210px; }
+.mobile-vertical-hero.n5 .product-media { width: 190px; height: 230px; }
+.mobile-vertical-hero.n5 .product-name { font-size: 20px; }
+
+/* six products (desktop) */
+.desktop-hero.n6 { gap: 20px; padding: 0 60px; }
+.desktop-hero.n6 .copy { flex-basis: 430px; }
+.desktop-hero.n6 .headline { font-size: 46px; }
+.desktop-hero.n6 .products { gap: 10px; }
+.desktop-hero.n6 .product { width: 120px; }
+.desktop-hero.n6 .product-media { width: 106px; }
+.desktop-hero.n6 .product-name { font-size: 12px; }
+
+/* 6-8 products (vertical): 4 per row */
+.mobile-vertical-hero.n6 .products, .mobile-vertical-hero.n7 .products, .mobile-vertical-hero.n8 .products { gap: 24px 12px; }
+.mobile-vertical-hero.n6 .product, .mobile-vertical-hero.n7 .product, .mobile-vertical-hero.n8 .product { width: 158px; }
+.mobile-vertical-hero.n6 .product-media, .mobile-vertical-hero.n7 .product-media, .mobile-vertical-hero.n8 .product-media { width: 146px; height: 210px; }
+.mobile-vertical-hero.n6 .product-name, .mobile-vertical-hero.n7 .product-name, .mobile-vertical-hero.n8 .product-name { font-size: 16px; }
+
+/* keep headlines and names from leaving a single orphan word */
+.headline, .sub, .product-name { text-wrap: balance; }
+.mobile-vertical-hero[dir="rtl"] .headline { font-size: 72px; }

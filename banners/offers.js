@@ -41,22 +41,26 @@ const OFFERS = [
  },
   {
     id: "offer-2",
-    theme: { from: "#0f5132", to: "#198754", accent: "#ffc107", text: "#ffffff" },
-    badge: { en: "BUY 1 GET 1", ar: "اشترِ 1 واحصل على 1" },
-    headline: { en: "Buy 1, Get 1 Free", ar: "اشترِ منتجاً والثاني مجاناً" },
-    sub: { en: "On selected products — limited time only", ar: "على منتجات مختارة ولفترة محدودة" },
+    theme: { from: "#0a1a4f", to: "#1d4ed8", accent: "#ffd166", text: "#ffffff" },
+    badge: { en: "LIMITED TIME", ar: "لفترة محدودة" },
+    headline: { en: "Buy 2 Get 2", ar: "اشترِ 2 واحصل على 2" },
+    sub: { en: "On Bioxcin hair care favourites", ar: "على منتجات بيوكسين للعناية بالشعر" },
     cta: { en: "Shop Now", ar: "تسوّق الآن" },
-    code: { en: "", ar: "" }, // optional promo code, e.g. { en: "Code: B1G1", ar: "كود: B1G1" }
+    code: { en: "", ar: "" },
     products: [
-      { name: { en: "Product 1", ar: "منتج 1" }, image: "", price: "", oldPrice: "" },
-      { name: { en: "Product 2", ar: "منتج 2" }, image: "", price: "", oldPrice: "" },
-      { name: { en: "Product 3", ar: "منتج 3" }, image: "", price: "", oldPrice: "" },
-      { name: { en: "Product 4", ar: "منتج 4" }, image: "", price: "", oldPrice: "" },
+      { name: { en: "Quantum Bio-Activ Shampoo", ar: "شامبو كوانتم بيو أكتيف" }, image: "products/bioxcin-quantum-shampoo.png", price: "", oldPrice: "" },
+      { name: { en: "Forte Herbal Shampoo", ar: "شامبو فورت العشبي" }, image: "products/bioxcin-forte-shampoo.png", price: "", oldPrice: "" },
+      { name: { en: "Forte Herbal Serum", ar: "سيروم فورت العشبي" }, image: "products/bioxcin-forte-serum.png", price: "", oldPrice: "" },
+      { name: { en: "Quantum Bio-Activ Serum", ar: "سيروم كوانتم بيو أكتيف" }, image: "products/bioxcin-quantum-serum.png", price: "", oldPrice: "" },
+      { name: { en: "Eyelash & Eyebrow Serum", ar: "سيروم الرموش والحواجب" }, image: "products/bioxcin-eyelash-serum.png", price: "", oldPrice: "" },
+      { name: { en: "Black Garlic Shampoo", ar: "شامبو الثوم الأسود" }, image: "products/bioxcin-black-garlic-shampoo.png", price: "", oldPrice: "" },
+      { name: { en: "Anti-Dandruff Thermal Shampoo", ar: "شامبو حراري ضد القشرة" }, image: "products/bioxcin-anti-dandruff-shampoo.png", price: "", oldPrice: "" },
+      { name: { en: "Intensive Anti-Dandruff DS Shampoo", ar: "شامبو DS المكثف ضد القشرة" }, image: "products/bioxcin-anti-dandruff-ds-shampoo.png", price: "", oldPrice: "" },
     ],
   },
   {
     id: "offer-3",
-    theme: { from: "#1b2a6b", to: "#3d5af1", accent: "#22d1ee", text: "#ffffff" },
+    theme: { from: "#0f5132", to: "#198754", accent: "#ffc107", text: "#ffffff" },
     badge: { en: "BUNDLE & SAVE", ar: "باقات التوفير" },
     headline: { en: "Bundle Up & Save More", ar: "وفّر أكثر مع باقاتنا" },
     sub: { en: "Special bundle prices on top picks", ar: "أسعار حصرية على باقات مختارة" },
@@ -73,10 +77,10 @@ const OFFERS = [
 
 // Banner slots from the upload screen. maxProducts = how many products fit.
 const SIZES = [
-  { id: "mobile-vertical-hero", device: "mobile", label: "Vertical Hero Banner", w: 800, h: 1200, maxProducts: 4 },
+  { id: "mobile-vertical-hero", device: "mobile", label: "Vertical Hero Banner", w: 800, h: 1200, maxProducts: 8 },
   { id: "mobile-hero", device: "mobile", label: "Hero Banner", w: 706, h: 320, maxProducts: 3 },
   { id: "mobile-slim", device: "mobile", label: "Slim Banner", w: 800, h: 200, maxProducts: 3 },
-  { id: "desktop-hero", device: "desktop", label: "Hero Banner", w: 1440, h: 300, maxProducts: 4 },
+  { id: "desktop-hero", device: "desktop", label: "Hero Banner", w: 1440, h: 300, maxProducts: 6 },
 ];
 
 const LANGS = ["en", "ar"];
