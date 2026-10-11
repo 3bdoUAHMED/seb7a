@@ -27,7 +27,7 @@ const BRAND = {
 const HEADLINE_STYLE = "plain";
 
 // Background pattern: "studio" (plain + product pedestals) | "circles" | "waves" | "leaves" | "glow"
-const PATTERN = "studio";
+const PATTERN = "circles";
 
 const OFFERS = [
   {
