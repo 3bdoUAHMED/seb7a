@@ -7,6 +7,11 @@ function esc(s) {
 }
 
 // Simple bottle drawing used until a real product photo is set.
+// Escapes text and keeps numbers like "40%" left-to-right inside Arabic text.
+function txt(s) {
+  return esc(s).replace(/[0-9][0-9.,]*(?:\s?%)?/g, (m) => `<span dir="ltr">${m}</span>`);
+}
+
 function placeholderProduct(name, theme, i) {
   const caps = [theme.accent, "#ffffff", theme.to, theme.from];
   const cap = caps[i % caps.length];
@@ -34,7 +39,7 @@ function productHTML(p, offer, lang, i, showName) {
   return `
     <div class="product">
       <div class="product-media">${media}</div>
-      ${showName ? `<div class="product-name">${esc(name)}</div>${price}` : ""}
+      ${showName ? `<div class="product-name">${txt(name)}</div>${price}` : ""}
     </div>`;
 }
 
@@ -57,12 +62,12 @@ function bannerHTML(offer, size, lang) {
       <div class="deco deco-1"></div><div class="deco deco-2"></div><div class="deco deco-3"></div>
       <div class="copy">
         ${logoHTML(lang)}
-        <div class="badge">${esc(offer.badge[lang])}</div>
-        <h2 class="headline">${esc(offer.headline[lang])}</h2>
-        <p class="sub">${esc(offer.sub[lang])}</p>
+        <div class="badge">${txt(offer.badge[lang])}</div>
+        <h2 class="headline">${txt(offer.headline[lang])}</h2>
+        <p class="sub">${txt(offer.sub[lang])}</p>
         <div class="actions">
-          <span class="cta">${esc(offer.cta[lang])}<span class="arrow">${lang === "ar" ? "←" : "→"}</span></span>
-          ${code ? `<span class="code">${esc(code)}</span>` : ""}
+          <span class="cta">${txt(offer.cta[lang])}<span class="arrow">${lang === "ar" ? "←" : "→"}</span></span>
+          ${code ? `<span class="code">${txt(code)}</span>` : ""}
         </div>
       </div>
       <div class="products">
@@ -70,8 +75,8 @@ function bannerHTML(offer, size, lang) {
       </div>
       ${size.id === "mobile-vertical-hero" ? `
       <div class="footer-cta">
-        <span class="cta">${esc(offer.cta[lang])}<span class="arrow">${lang === "ar" ? "←" : "→"}</span></span>
-        ${code ? `<span class="code">${esc(code)}</span>` : ""}
+        <span class="cta">${txt(offer.cta[lang])}<span class="arrow">${lang === "ar" ? "←" : "→"}</span></span>
+        ${code ? `<span class="code">${txt(code)}</span>` : ""}
       </div>` : ""}
     </div>`;
 }

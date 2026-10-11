@@ -3,7 +3,7 @@
 //  Offer data — this is the only file you need to edit
 // =====================================================================
 //
-//  - كل عرض بيطلع منه ٨ بنرات: (٣ موبايل + ١ ديسكتوب) × (عربي + إنجليزي)
+//  - كل عرض بيطلع منه 8 بنرات: (3 موبايل + 1 ديسكتوب) × (عربي + إنجليزي)
 //  - Each offer produces 8 banners: (3 mobile + 1 desktop) × (EN + AR)
 //
 //  صور المنتجات: حط الصورة (PNG بخلفية شفافة أفضل) في فولدر banners/products
@@ -28,7 +28,7 @@ const OFFERS = [
     id: "offer-1",
     theme: { from: "#7a1e2c", to: "#d63447", accent: "#ffe66d", text: "#ffffff" },
     badge: { en: "LIMITED TIME", ar: "لفترة محدودة" },
-    headline: { en: "Up to 40% OFF", ar: "خصم يصل إلى ٤٠٪" },
+    headline: { en: "Up to 40% OFF", ar: "خصم يصل إلى 40%" },
     sub: { en: "On Bioxcin hair care favourites", ar: "على منتجات بيوكسين للعناية بالشعر" },
     cta: { en: "Shop Now", ar: "تسوّق الآن" },
     code: { en: "", ar: "" },
@@ -42,16 +42,16 @@ const OFFERS = [
   {
     id: "offer-2",
     theme: { from: "#0f5132", to: "#198754", accent: "#ffc107", text: "#ffffff" },
-    badge: { en: "BUY 1 GET 1", ar: "اشترِ ١ واحصل على ١" },
+    badge: { en: "BUY 1 GET 1", ar: "اشترِ 1 واحصل على 1" },
     headline: { en: "Buy 1, Get 1 Free", ar: "اشترِ منتجاً والثاني مجاناً" },
     sub: { en: "On selected products — limited time only", ar: "على منتجات مختارة ولفترة محدودة" },
     cta: { en: "Shop Now", ar: "تسوّق الآن" },
     code: { en: "", ar: "" }, // optional promo code, e.g. { en: "Code: B1G1", ar: "كود: B1G1" }
     products: [
-      { name: { en: "Product 1", ar: "منتج ١" }, image: "", price: "", oldPrice: "" },
-      { name: { en: "Product 2", ar: "منتج ٢" }, image: "", price: "", oldPrice: "" },
-      { name: { en: "Product 3", ar: "منتج ٣" }, image: "", price: "", oldPrice: "" },
-      { name: { en: "Product 4", ar: "منتج ٤" }, image: "", price: "", oldPrice: "" },
+      { name: { en: "Product 1", ar: "منتج 1" }, image: "", price: "", oldPrice: "" },
+      { name: { en: "Product 2", ar: "منتج 2" }, image: "", price: "", oldPrice: "" },
+      { name: { en: "Product 3", ar: "منتج 3" }, image: "", price: "", oldPrice: "" },
+      { name: { en: "Product 4", ar: "منتج 4" }, image: "", price: "", oldPrice: "" },
     ],
   },
   {
@@ -63,10 +63,10 @@ const OFFERS = [
     cta: { en: "Shop Now", ar: "تسوّق الآن" },
     code: { en: "", ar: "" },
     products: [
-      { name: { en: "Product 1", ar: "منتج ١" }, image: "", price: "", oldPrice: "" },
-      { name: { en: "Product 2", ar: "منتج ٢" }, image: "", price: "", oldPrice: "" },
-      { name: { en: "Product 3", ar: "منتج ٣" }, image: "", price: "", oldPrice: "" },
-      { name: { en: "Product 4", ar: "منتج ٤" }, image: "", price: "", oldPrice: "" },
+      { name: { en: "Product 1", ar: "منتج 1" }, image: "", price: "", oldPrice: "" },
+      { name: { en: "Product 2", ar: "منتج 2" }, image: "", price: "", oldPrice: "" },
+      { name: { en: "Product 3", ar: "منتج 3" }, image: "", price: "", oldPrice: "" },
+      { name: { en: "Product 4", ar: "منتج 4" }, image: "", price: "", oldPrice: "" },
     ],
   },
 ];
