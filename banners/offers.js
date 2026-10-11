@@ -19,7 +19,7 @@
 //  (Offer 1 = Up to 40% OFF is confirmed; offers 2 & 3 texts are still placeholders.)
 
 const BRAND = {
-  logo: "", // e.g. "products/logo.png" — empty = text logo below
+  logo: "products/bioxcin-logo.png", // white logo for dark backgrounds — empty = text logo below
   name: { en: "", ar: "" }, // e.g. { en: "My Store", ar: "اسم المتجر" } — empty = no logo
 };
 

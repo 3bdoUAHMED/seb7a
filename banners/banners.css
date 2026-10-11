@@ -233,3 +233,9 @@ img.logo { object-fit: contain; }
 .mobile-vertical-hero .product { align-self: stretch; justify-content: flex-end; }
 .mobile-vertical-hero .product-name { min-height: 2.5em; display: flex; align-items: flex-start; justify-content: center; }
 .product-media img { transform: scale(var(--z, 1)); transform-origin: bottom center; }
+
+/* brand logo sizes */
+.desktop-hero img.logo { height: 46px; margin-bottom: 4px; }
+.mobile-hero img.logo { height: 34px; margin-bottom: 2px; }
+.mobile-slim img.logo { display: block; height: 26px; }
+.mobile-vertical-hero img.logo { height: 84px; margin-bottom: 8px; }
