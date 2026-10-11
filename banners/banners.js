@@ -59,7 +59,7 @@ function bannerHTML(offer, size, lang) {
   const showNames = size.id === "mobile-vertical-hero" || size.id === "desktop-hero";
   const code = offer.code?.[lang];
   return `
-    <div class="banner ${size.id} hl-${window.HL_STYLE || HEADLINE_STYLE} pat-${window.PATTERN_OVERRIDE || PATTERN} n${products.length}${products.length >= 5 ? " many" : ""}" dir="${lang === "ar" ? "rtl" : "ltr"}" lang="${lang}"
+    <div class="banner ${offer.id} ${size.id} hl-${window.HL_STYLE || HEADLINE_STYLE} pat-${window.PATTERN_OVERRIDE || PATTERN} n${products.length}${products.length >= 5 ? " many" : ""}" dir="${lang === "ar" ? "rtl" : "ltr"}" lang="${lang}"
          data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png"
          style="width:${size.w}px;height:${size.h}px;--from:${t.from};--to:${t.to};--accent:${t.accent};--text:${t.text}">
       <div class="deco deco-1"></div><div class="deco deco-2"></div><div class="deco deco-3"></div>
@@ -67,7 +67,7 @@ function bannerHTML(offer, size, lang) {
         ${logoHTML(lang)}
         <div class="badge">${txt(offer.badge[lang])}</div>
         <h2 class="headline">${txt(offer.headline[lang], "hl-num")}</h2>
-        <p class="sub">${txt(offer.sub[lang])}</p>
+        ${offer.sub[lang] ? `<p class="sub">${txt(offer.sub[lang])}</p>` : ""}
         <div class="actions">
           <span class="cta">${txt(offer.cta[lang])}<span class="arrow">${lang === "ar" ? "←" : "→"}</span></span>
           ${code ? `<span class="code">${txt(code)}</span>` : ""}

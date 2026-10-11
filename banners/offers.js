@@ -72,7 +72,7 @@ const OFFERS = [
     theme: { from: "#0b1d4d", to: "#1f3f8f", accent: "#f2cf7a", text: "#ffffff" },
     badge: { en: "LIMITED TIME", ar: "لفترة محدودة" },
     headline: { en: "Buy 1 Get 50% OFF", ar: "اشترِ 1 واحصل على خصم 50%" },
-    sub: { en: "On the second Bioxcin serum", ar: "على منتج بيوكسين الثاني" },
+    sub: { en: "", ar: "" },
     cta: { en: "Shop Now", ar: "تسوّق الآن" },
     code: { en: "", ar: "" },
     products: [
