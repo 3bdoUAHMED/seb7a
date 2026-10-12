@@ -305,11 +305,46 @@ function arcBannerHTML(offer, size, lang, cls, style) {
     </div>`;
 }
 
+// 3D word: white face (or red) with a stacked extrusion.
+function word3d(t, cls) {
+  return `<span class="w3d ${cls}" data-t="${esc(t)}">${esc(t)}</span>`;
+}
+
+// "Scene" layout: photo wall, stone ledge, products standing on it, 3D "50% OFF".
+function sceneBannerHTML(offer, size, lang, style) {
+  const rtl = lang === "ar";
+  const big = `
+    <div class="sc-big" dir="ltr">
+      <i class="sc-line red"></i>
+      ${rtl ? `${word3d(offer.big.word.ar, "red ar")}${word3d(offer.big.num, "white")}`
+            : `${word3d(offer.big.num, "white")}${word3d(offer.big.word.en, "red")}`}
+      <i class="sc-line white"></i>
+    </div>`;
+  const prods = offer.products.map((p) =>
+    `<img class="sc-p" style="--h:${p.h}" src="${esc(p.image)}" alt="">`).join("");
+  return `
+    <div class="banner scene ${offer.id} ${size.id}" dir="${rtl ? "rtl" : "ltr"}" lang="${lang}"
+         data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png" style="${style}">
+      <div class="sc-wall"></div>
+      <div class="sc-ledge"><div class="sc-top"></div><div class="sc-face"></div><div class="sc-floor"></div></div>
+      <div class="sc-products">${prods}</div>
+      ${stickerHTML({ ...offer, stickerBadge: null }, lang)}
+      <div class="sc-copy">
+        ${logoHTML(lang)}
+        ${big}
+        <span class="cta">${txt(offer.cta[lang])}<span class="arrow">${rtl ? "←" : "→"}</span></span>
+      </div>
+    </div>`;
+}
+
 function bannerHTML(offer, size, lang) {
   const t = offer.theme;
   const products = offer.products.slice(0, size.maxProducts);
   const showNames = size.id === "mobile-vertical-hero" || size.id === "desktop-hero";
   const code = offer.code?.[lang];
+  if (offer.layout === "scene") {
+    return sceneBannerHTML(offer, size, lang, `width:${size.w}px;height:${size.h}px;--accent:${t.accent}`);
+  }
   if (offer.layout === "arc" && ARC_STAGE[size.id]) {
     return arcBannerHTML(offer, size, lang, `${offer.id} ${size.id} hl-${window.HL_STYLE || HEADLINE_STYLE} pat-${window.PATTERN_OVERRIDE || PATTERN} n${products.length}`,
       `width:${size.w}px;height:${size.h}px;--from:${t.from};--to:${t.to};--accent:${t.accent};--glow:${t.glow || t.to};--text:${t.text}`);

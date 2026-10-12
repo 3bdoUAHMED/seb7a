@@ -83,17 +83,19 @@ const OFFERS = [
   },
   {
     id: "offer-3",
+    layout: "scene", // photo wall + stone ledge, 3D "50% OFF", ribbon sticker
+    sticker: ["YELLOW", "NOVEMBER"],
+    big: { num: "50%", word: { en: "OFF", ar: "خصم" } },
     theme: { from: "#0a0a0a", to: "#1a1a1a", accent: "#f2c94c", glow: "#2f5fd0", text: "#ffffff" },
-    stickerBadge: { en: "50%|OFF", ar: "50%|OFF" }, // round badge on the BLACK FRIDAY sticker ("|" = new line)
-    badge: { en: "BLACK FRIDAY", ar: "بلاك فرايداي" },
-    headline: { en: "Buy 1 Get 50% OFF", ar: "اشترِ 1 واحصل على خصم 50%" },
+    badge: { en: "YELLOW NOVEMBER", ar: "نوفمبر الأصفر" },
+    headline: { en: "50% OFF", ar: "خصم 50%" },
     sub: { en: "", ar: "" },
     cta: { en: "Shop Now", ar: "تسوّق الآن" },
     code: { en: "", ar: "" },
     products: [
-      { name: { en: "Forte Herbal Serum", ar: "سيروم فورت العشبي" }, image: "products/bioxcin-forte-serum.png", scale: 0.85, price: "", oldPrice: "" },
-      { name: { en: "Quantum Bio-Activ Serum", ar: "سيروم كوانتم بيو أكتيف" }, image: "products/bioxcin-quantum-serum.png", scale: 0.62, zoom: 1.4, price: "", oldPrice: "" },
-      { name: { en: "Eyelash & Eyebrow Serum", ar: "سيروم الرموش والحواجب" }, image: "products/bioxcin-eyelash-serum.png", scale: 0.95, price: "", oldPrice: "" },
+      { name: { en: "Forte Herbal Serum", ar: "سيروم فورت العشبي" }, image: "products/bioxcin-forte-serum.png", h: 1, price: "", oldPrice: "" },
+      { name: { en: "Quantum Bio-Activ Serum", ar: "سيروم كوانتم بيو أكتيف" }, image: "products/bioxcin-quantum-serum.png", h: 0.68, price: "", oldPrice: "" },
+      { name: { en: "Eyelash & Eyebrow Serum", ar: "سيروم الرموش والحواجب" }, image: "products/bioxcin-eyelash-serum.png", h: 0.92, price: "", oldPrice: "" },
     ],
   },
 ];
