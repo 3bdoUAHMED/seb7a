@@ -320,6 +320,18 @@ function sceneBannerHTML(offer, size, lang, style) {
             : `${word3d(offer.big.num, "white")}${word3d(offer.big.word.en, "red")}`}
       <i class="sc-line white"></i>
     </div>`;
+  if (offer.wideBg?.[size.id]) {
+    return `
+    <div class="banner scene photo ${offer.id} ${size.id}" dir="${rtl ? "rtl" : "ltr"}" lang="${lang}"
+         data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png"
+         style="${style};background:url('${esc(offer.wideBg[size.id])}') 0 0/100% 100%">
+      ${stickerHTML({ ...offer, stickerBadge: null }, lang)}
+      <div class="ph-copy">
+        ${big}
+        <span class="cta">${txt(offer.cta[lang])}<span class="arrow">${rtl ? "←" : "→"}</span></span>
+      </div>
+    </div>`;
+  }
   const prods = offer.products.map((p) =>
     `<img class="sc-p" style="--h:${p.h}" src="${esc(p.image)}" alt="">`).join("");
   return `

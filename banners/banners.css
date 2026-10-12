@@ -623,3 +623,25 @@ img.logo { object-fit: contain; }
 .scene.desktop-hero .sc-big { margin-inline-start: 250px; }
 .scene.desktop-hero .bf-sticker { width: 150px; top: 6px; inset-inline-end: 520px; }
 [dir="rtl"].scene.desktop-hero .sc-big { margin-left: 0; margin-right: 250px; }
+
+/* ---------- SCENE photo variant (wide sizes on the supplied photo) ---------- */
+.banner.scene.photo .ph-copy { position: absolute; z-index: 3; display: flex; flex-direction: column; align-items: center; }
+.banner.scene.photo .sc-big { transform: rotate(-6deg); }
+.scene.photo.mobile-slim .ph-copy { left: 14px; width: 232px; top: 22px; gap: 14px; }
+.scene.photo.mobile-slim .sc-big { font-size: 66px; }
+.scene.photo.mobile-slim .cta { display: inline-flex; font-size: 12px; padding: 7px 16px; }
+.scene.photo.mobile-slim .bf-sticker { width: 112px; top: 64px; left: 650px; right: auto; inset-inline-start: auto; }
+.scene.photo.desktop-hero .ph-copy { left: 40px; width: 400px; top: 40px; gap: 34px; }
+.scene.photo.desktop-hero .sc-big { font-size: 112px; margin: 0; }
+.scene.photo.desktop-hero .cta { position: static; font-size: 17px; padding: 11px 28px; }
+.scene.photo.desktop-hero .bf-sticker { width: 160px; top: 116px; left: 1200px; right: auto; inset-inline-start: auto; }
+.scene.photo.mobile-hero .ph-copy { left: 10px; width: 268px; top: 104px; gap: 30px; }
+.scene.photo.mobile-hero .sc-big { font-size: 74px; }
+.scene.photo.mobile-hero .cta { font-size: 14px; padding: 9px 22px; }
+.scene.photo.mobile-hero .bf-sticker { width: 112px; top: 2px; left: 590px; right: auto; inset-inline-start: auto; }
+.banner.scene.photo .bf-sticker { inset-inline-start: auto; inset-inline-end: auto; }
+.banner.scene.photo.mobile-slim .bf-sticker { left: 650px; }
+.banner.scene.photo.desktop-hero .bf-sticker { left: 1200px; }
+.banner.scene.photo.mobile-hero .bf-sticker { left: 590px; }
+.banner.scene.photo .sc-big { order: 0; margin: 0 !important; }
+.banner.scene.photo .cta { order: 1; position: static; }
