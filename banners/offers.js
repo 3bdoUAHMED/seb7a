@@ -32,23 +32,27 @@ const PATTERN = "blackfriday";
 // Show the round BLACK FRIDAY sticker (replaces the pill badge)
 const STICKER = false;
 
+// "Big number" hero concept: a giant 3D discount number with the products in front of it.
+const HERO = false;
+
 const OFFERS = [
   {
     id: "offer-1",
     theme: { from: "#0a0a0a", to: "#1a1a1a", accent: "#f2c94c", glow: "#d63447", text: "#ffffff" },
     stickerBadge: { en: "40%|OFF", ar: "40%|OFF" }, // round badge on the BLACK FRIDAY sticker ("|" = new line)
+    bigNum: { pre: { en: "UP TO", ar: "خصم يصل إلى" }, num: "40%", post: { en: "OFF", ar: "" } },
     badge: { en: "BLACK FRIDAY", ar: "بلاك فرايداي" },
     headline: { en: "Up to 40% OFF", ar: "خصم يصل إلى 40%" },
     sub: { en: "On Bioxcin hair care favourites", ar: "على منتجات بيوكسين للعناية بالشعر" },
     cta: { en: "Shop Now", ar: "تسوّق الآن" },
     code: { en: "", ar: "" },
     products: [
-      { name: { en: "Forte Herbal Shampoo", ar: "شامبو فورت العشبي" }, image: "products/bioxcin-forte-shampoo.png", price: "", oldPrice: "" },
-      { name: { en: "Forte Herbal Serum", ar: "سيروم فورت العشبي" }, image: "products/bioxcin-forte-serum.png", price: "", oldPrice: "" },
-      { name: { en: "Quantum Bio-Activ Serum", ar: "سيروم كوانتم بيو أكتيف" }, image: "products/bioxcin-quantum-serum.png", price: "", oldPrice: "" },
-      { name: { en: "Eyelash & Eyebrow Serum", ar: "سيروم الرموش والحواجب" }, image: "products/bioxcin-eyelash-serum.png", price: "", oldPrice: "" },
+      { name: { en: "Eyelash & Eyebrow Serum", ar: "سيروم الرموش والحواجب" }, image: "products/bioxcin-eyelash-serum.png", scale: 0.8, price: "", oldPrice: "" },
+      { name: { en: "Forte Herbal Shampoo", ar: "شامبو فورت العشبي" }, image: "products/bioxcin-forte-shampoo.png", scale: 1, price: "", oldPrice: "" },
+      { name: { en: "Forte Herbal Serum", ar: "سيروم فورت العشبي" }, image: "products/bioxcin-forte-serum.png", scale: 0.86, price: "", oldPrice: "" },
+      { name: { en: "Quantum Bio-Activ Serum", ar: "سيروم كوانتم بيو أكتيف" }, image: "products/bioxcin-quantum-serum.png", scale: 0.62, zoom: 1.35, price: "", oldPrice: "" },
     ],
-  },
+ },
   {
     id: "offer-2",
     theme: { from: "#0a0a0a", to: "#1a1a1a", accent: "#f2c94c", glow: "#b23a55", text: "#ffffff" },

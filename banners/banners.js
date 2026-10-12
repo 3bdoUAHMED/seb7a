@@ -101,11 +101,47 @@ function logoHTML(lang) {
     : `<div class="logo logo-text">${esc(BRAND.name[lang])}</div>`;
 }
 
+// Giant glossy 3D number (red face, black extruded body).
+function bigNumHTML(offer, lang) {
+  const b = offer.bigNum;
+  return `
+    <div class="bn">
+      ${b.pre[lang] ? `<div class="bn-pre">${txt(b.pre[lang])}</div>` : ""}
+      <div class="bn-row" dir="ltr">
+        <span class="bn-num" data-t="${esc(b.num)}">${esc(b.num)}</span>
+        ${b.post[lang] ? `<span class="bn-post">${esc(b.post[lang])}</span>` : ""}
+      </div>
+    </div>`;
+}
+
+function heroVerticalHTML(offer, size, lang, cls, style) {
+  const products = offer.products.slice(0, size.maxProducts);
+  return `
+    <div class="banner hero ${cls}" dir="${lang === "ar" ? "rtl" : "ltr"}" lang="${lang}"
+         data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png" style="${style}">
+      ${stickerHTML({ ...offer, stickerBadge: null }, lang)}
+      <div class="hero-top">${logoHTML(lang)}</div>
+      ${bigNumHTML(offer, lang)}
+      <div class="hero-products">
+        ${products.map((p, i) => productHTML(p, offer, lang, i, false)).join("")}
+      </div>
+      <div class="hero-bottom">
+        <p class="hero-sub">${txt(offer.headlineSub?.[lang] ?? offer.sub[lang] ?? "")}</p>
+        <span class="cta">${txt(offer.cta[lang])}<span class="arrow">${lang === "ar" ? "←" : "→"}</span></span>
+      </div>
+    </div>`;
+}
+
 function bannerHTML(offer, size, lang) {
   const t = offer.theme;
   const products = offer.products.slice(0, size.maxProducts);
   const showNames = size.id === "mobile-vertical-hero" || size.id === "desktop-hero";
   const code = offer.code?.[lang];
+  if ((window.HERO_OVERRIDE ?? HERO) && offer.bigNum && size.id === "mobile-vertical-hero") {
+    const t2 = offer.theme;
+    return heroVerticalHTML(offer, size, lang, `${offer.id} ${size.id} pat-${window.PATTERN_OVERRIDE || PATTERN} n${products.length}`,
+      `width:${size.w}px;height:${size.h}px;--from:${t2.from};--to:${t2.to};--accent:${t2.accent};--glow:${t2.glow || t2.to};--text:${t2.text}`);
+  }
   return `
     <div class="banner ${offer.id} ${size.id} ${(window.STICKER_OVERRIDE ?? STICKER) ? "has-sticker" : ""} hl-${window.HL_STYLE || HEADLINE_STYLE} pat-${window.PATTERN_OVERRIDE || PATTERN} n${products.length}${products.length >= 5 ? " many" : ""}" dir="${lang === "ar" ? "rtl" : "ltr"}" lang="${lang}"
          data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png"
