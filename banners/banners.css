@@ -703,3 +703,19 @@ img.logo { object-fit: contain; }
   linear-gradient(115deg, rgba(95,70,40,.30) 0%, rgba(95,70,40,.22) 18%, transparent 34%, transparent 58%, rgba(95,70,40,.14) 70%, rgba(255,255,255,.18) 82%, transparent 92%),
   radial-gradient(ellipse 60% 120% at 62% 0%, #f1e6d6, transparent 70%),
   linear-gradient(180deg, #e3d4bf, #d6c3a8); }
+
+/* studio v2: original photo background + products re-drawn on their spots */
+.studio .st-abs { position: absolute; z-index: 2; transform: translate(-50%, -100%); width: auto; filter: drop-shadow(4px 4px 5px rgba(70,45,20,.3)); }
+.studio .st-wall, .studio .st-ledge, .studio .st-products { display: none; }
+/* Arabic lockup: "خصم" sits on top of the right edge of "50%" */
+.ar-lock { display: inline-flex; flex-direction: column; align-items: flex-end; }
+.ar-lock .w3d.red.ar { order: 0; font-size: .5em; margin: 0 .02em -.22em 0; align-self: flex-end; transform: rotate(-4deg); }
+.ar-lock .w3d.white { order: 1; }
+.studio.mobile-slim .ph-copy { left: 14px; width: 236px; top: 16px; gap: 12px; }
+.studio.desktop-hero .ph-copy { left: 60px; width: 520px; top: 34px; gap: 26px; }
+.studio.desktop-hero .bf-sticker { left: 1220px; }
+.studio.desktop-hero .st-logo { display: none; }
+.studio.mobile-hero .ph-copy { left: 10px; width: 290px; top: 92px; gap: 22px; }
+.studio.mobile-hero .bf-sticker { left: 580px; top: 2px; }
+.sc-big:has(.ar-lock) .sc-line.red { top: -.42em; right: 0; width: 62%; }
+.studio.mobile-slim[dir="rtl"] .ph-copy { top: 30px; }

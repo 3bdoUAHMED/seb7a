@@ -310,26 +310,38 @@ function word3d(t, cls) {
   return `<span class="w3d ${cls}" data-t="${esc(t)}">${esc(t)}</span>`;
 }
 
+// Offer-3 wide banners: scale/offset of the original photo inside each banner (see make-wide-bg.py).
+const STUDIO_GEO = {
+  "mobile-slim": { k: 1, ox: 0, oy: 0 },
+  "desktop-hero": { k: 1.5, ox: 240, oy: 0 },
+  "mobile-hero": { k: 1.25, ox: 0, oy: 70, logo: true },
+};
+
 // "Scene" layout: photo wall, stone ledge, products standing on it, 3D "50% OFF".
 function sceneBannerHTML(offer, size, lang, style) {
   const rtl = lang === "ar";
   const big = `
     <div class="sc-big" dir="ltr">
       <i class="sc-line red"></i>
-      ${rtl ? `${word3d(offer.big.word.ar, "red ar")}${word3d(offer.big.num, "white")}`
+      ${rtl ? `<span class="ar-lock">${word3d(offer.big.word.ar, "red ar")}${word3d(offer.big.num, "white")}</span>`
             : `${word3d(offer.big.num, "white")}${word3d(offer.big.word.en, "red")}`}
       <i class="sc-line white"></i>
     </div>`;
-  if (offer.studio && size.id !== "mobile-vertical-hero") {
-    const prods = offer.products.map((p) =>
-      `<div class="st-p" style="--h:${p.h}"><img src="${esc(p.image)}" alt=""></div>`).join("");
+  if (offer.studio && STUDIO_GEO[size.id]) {
+    const g = STUDIO_GEO[size.id];
+    // product spots in the original 800x200 photo: [centre x, bottom y, height]
+    const spots = [[288, 188, 176], [418, 184, 134], [536, 186, 164]];
+    const prods = offer.products.map((p, i) => {
+      const [cx, by, h] = spots[i];
+      return `<img class="st-abs" src="${esc(p.image)}" alt=""
+        style="left:${g.ox + cx * g.k}px;top:${g.oy + by * g.k}px;height:${h * g.k}px">`;
+    }).join("");
     return `
     <div class="banner scene studio ${offer.id} ${size.id}" dir="${rtl ? "rtl" : "ltr"}" lang="${lang}"
-         data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png" style="${style}">
-      <div class="st-wall"></div>
-      <div class="st-ledge"></div>
-      <div class="st-products">${prods}</div>
-      <img class="st-logo" src="products/bioxcin-logo-red.png" alt="BIOXCIN">
+         data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png"
+         style="${style};background:url('products/offer3-bg-${size.w}x${size.h}.jpg') 0 0/100% 100%">
+      ${prods}
+      ${g.logo ? `<img class="st-logo" src="products/bioxcin-logo-red.png" alt="BIOXCIN">` : ""}
       ${stickerHTML({ ...offer, stickerBadge: null }, lang)}
       <div class="ph-copy">
         ${big}
