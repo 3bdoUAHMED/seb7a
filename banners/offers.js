@@ -40,7 +40,7 @@ const OFFERS = [
     id: "offer-1",
     theme: { from: "#0a0a0a", to: "#1a1a1a", accent: "#f2c94c", glow: "#d63447", text: "#ffffff" },
     stickerBadge: { en: "40%|OFF", ar: "40%|OFF" }, // round badge on the BLACK FRIDAY sticker ("|" = new line)
-    bigNum: { pre: { en: "UP TO", ar: "خصم يصل إلى" }, num: "", image: "", post: { en: "", ar: "" } }, // image = your 3D artwork (e.g. "products/40-3d.png"); empty = blank space
+    bigNum: { pre: { en: "", ar: "" }, num: "", image: "", post: { en: "", ar: "" } }, // image = your 3D artwork (e.g. "products/40-3d.png"); empty = blank space
     badge: { en: "BLACK FRIDAY", ar: "بلاك فرايداي" },
     headline: { en: "Up to 40% OFF", ar: "خصم يصل إلى 40%" },
     sub: { en: "On Bioxcin hair care favourites", ar: "على منتجات بيوكسين للعناية بالشعر" },
