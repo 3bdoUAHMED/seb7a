@@ -22,7 +22,7 @@ function keepTogether(name) {
 // a star and a round badge with the offer's discount.
 function stickerHTML(offer, lang) {
   const [l1, l2 = ""] = (offer.stickerBadge?.[lang] ?? "").split("|");
-  const badgeFont = lang === "ar" ? "Cairo" : "Anton";
+  const badgeFont = /[\u0600-\u06ff]/.test(l1 + l2) ? "Cairo" : "Anton";
   const long = Math.max(l1.length, l2.length) > 5;
   const fs = long ? 17 : 26;
   return `
