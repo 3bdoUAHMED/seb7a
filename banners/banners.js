@@ -26,6 +26,9 @@ function stickerHTML(offer, lang) {
   const long = Math.max(l1.length, l2.length) > 5;
   const fs = long ? 22 : 34;
   const gid = `bfg-${offer.id}-${lang}`;
+  const [w1, w2] = offer.sticker ?? ["BLACK", "FRIDAY"];
+  const yellow = w1 === "YELLOW";
+  const c1 = yellow ? "#f5c518" : "#d42a2a", c2 = yellow ? "#111" : "#d42a2a";
   // Extruded 3D text: stacked dark copies under a white face.
   const line3d = (t, x, y, size) => {
     const attrs = `text-anchor="middle" font-family="${badgeFont}, sans-serif" font-weight="900" font-size="${size}"`;
@@ -37,12 +40,12 @@ function stickerHTML(offer, lang) {
     <div class="bf-sticker">
       <svg viewBox="0 0 450 350" xmlns="http://www.w3.org/2000/svg">
         <g transform="rotate(-24 210 170)">
-          <path d="M28 168 l14 26 29 4 -21 20 5 29 -27 -14 -26 14 5 -29 -21 -20 29 -4z" fill="#d42a2a"/>
-          <path d="M100 70 H370 L346 112 L370 154 H100 Z" fill="#d42a2a"/>
-          <text x="220" y="128" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="500" font-size="56" fill="#111">BLACK</text>
+          <path d="M28 168 l14 26 29 4 -21 20 5 29 -27 -14 -26 14 5 -29 -21 -20 29 -4z" fill="${c1}"/>
+          <path d="M100 70 H370 L346 112 L370 154 H100 Z" fill="${c1}"/>
+          <text x="220" y="128" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="600" font-size="56" fill="#111" ${w1.length > 5 ? `textLength="220" lengthAdjust="spacingAndGlyphs"` : ""}>${w1}</text>
           <path d="M120 146 q 18 -16 36 0 t 36 0 t 36 0 t 36 0 t 36 0 t 36 0" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
           <path d="M80 160 H330 Q340 200 332 240 H86 Q92 220 76 204 Q92 186 80 160 Z" fill="#fff"/>
-          <text x="208" y="222" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="500" font-size="54" fill="#d42a2a">FRIDAY</text>
+          <text x="208" y="222" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="600" font-size="54" fill="${c2}" ${w2.length > 6 ? `textLength="228" lengthAdjust="spacingAndGlyphs"` : ""}>${w2}</text>
         </g>
         ${l1 ? `
         <defs>
@@ -186,11 +189,117 @@ function arcVerticalHTML(offer, size, lang, cls, style) {
     </div>`;
 }
 
+// Geometry of the arc stage per banner size (LTR coordinates; mirrored for RTL).
+const ARC_STAGE = {
+  "mobile-vertical-hero": { x: 60, w: 680, top: 720, base: 340, maxA: 30, slot: { y: 770, h: 210, w: 620 } },
+  "desktop-hero": { x: 560, w: 700, top: 206, base: 175, maxA: 16, slot: { y: 210, h: 84, w: 330 } },
+  "mobile-hero": { x: 300, w: 400, top: 222, base: 175, maxA: 24, slot: { y: 226, h: 88, w: 260 } },
+  "mobile-slim": { x: 330, w: 400, top: 136, base: 118, maxA: 20, slot: { y: 140, h: 56, w: 220 } },
+};
+
+function decoHTML(size, lang, rtl) {
+  // red curly ribbons (confetti) + a SALE ribbon
+  const curl = (x, y, r, sc) =>
+    `<path transform="translate(${x} ${y}) rotate(${r}) scale(${sc})" d="M0 0 C 20 -30 50 -30 60 0 S 100 30 120 0" fill="none" stroke="#d42a2a" stroke-width="14" stroke-linecap="round"/>`;
+  const bits = {
+    "mobile-vertical-hero": [curl(90, 920, 20, 0.6), curl(620, 1000, -30, 0.55), curl(30, 1130, 10, 0.5), curl(690, 1150, -60, 0.45), curl(700, 300, 40, 0.35)],
+    "desktop-hero": [curl(540, 40, 30, 0.3), curl(1250, 270, -20, 0.3)],
+    "mobile-hero": [curl(300, 20, 20, 0.25), curl(660, 290, -30, 0.25)],
+    "mobile-slim": [curl(720, 170, -20, 0.2)],
+  }[size.id] ?? [];
+  const sale = size.id === "mobile-vertical-hero" ? `
+    <g transform="translate(600 380) rotate(-14)">
+      <path d="M0 0 H200 L180 34 L200 68 H0 Z" fill="#d42a2a"/>
+      <path d="M0 68 L-26 92 L0 92 Z" fill="#7a0f0f"/>
+      <text x="96" y="47" text-anchor="middle" font-family="${lang === "ar" ? "Cairo" : "Anton"}, sans-serif" font-weight="900" font-size="38" fill="#fff">${lang === "ar" ? "تخفيضات" : "SALE"}</text>
+    </g>` : "";
+  return `<svg class="arc-deco" viewBox="0 0 ${size.w} ${size.h}" width="${size.w}" height="${size.h}" ${rtl ? `style="transform:scaleX(-1)"` : ""}>${bits.join("")}</svg>
+    ${sale ? `<svg class="arc-deco" viewBox="0 0 ${size.w} ${size.h}" width="${size.w}" height="${size.h}">${sale}</svg>` : ""}`;
+}
+
+function arcStageHTML(offer, size, lang) {
+  const g = ARC_STAGE[size.id];
+  const rtl = lang === "ar";
+  const products = offer.products.slice(0, size.maxProducts);
+  const n = products.length;
+  const x0 = rtl ? size.w - g.x - g.w : g.x;
+  const cx = x0 + g.w / 2;
+  const half = g.w * 0.4;
+  const R = half / Math.sin((g.maxA * Math.PI) / 180);
+  const cy = g.top + R;
+  const id = `${offer.id}-${size.id}-${lang}`;
+  const items = products.map((p, i) => {
+    const a = n === 1 ? 0 : -g.maxA + (2 * g.maxA * i) / (n - 1);
+    const rad = (a * Math.PI) / 180;
+    const x = cx + R * Math.sin(rad), y = cy - R * Math.cos(rad);
+    const h = g.base * (1 - 0.3 * Math.abs(a) / g.maxA) * (p.scale ?? 1);
+    const w = Math.max(h * 0.7, (g.w * 0.8 / n) * 1.1) * (p.zoom ?? 1);
+    return `<div class="arc-item" style="left:${x.toFixed(1)}px;top:${(y + 4).toFixed(1)}px;height:${h.toFixed(0)}px;width:${w.toFixed(0)}px;transform:translate(-50%,-100%) rotate(${(a * 0.5).toFixed(1)}deg)">
+        ${p.image ? `<img src="${esc(p.image)}" alt="">` : ""}</div>`;
+  }).join("");
+  const arc = (r, w, op, dash) =>
+    `<path d="M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}" fill="none" stroke="url(#arcg-${id})" stroke-width="${w}" stroke-opacity="${op}" stroke-linecap="round" ${dash ? `stroke-dasharray="${dash}"` : ""}/>`;
+  const k = g.base / 340; // scale line spacing to banner size
+  const slot = offer.bigNum?.image
+    ? `<img class="arc-slot" src="${esc(offer.bigNum.image)}" style="left:${cx - g.slot.w / 2}px;top:${g.slot.y}px;width:${g.slot.w}px;height:${g.slot.h}px" alt="">`
+    : `<div class="arc-slot" style="left:${cx - g.slot.w / 2}px;top:${g.slot.y}px;width:${g.slot.w}px;height:${g.slot.h}px"></div>`;
+  return `
+    <svg class="arc-lines" viewBox="0 0 ${size.w} ${size.h}" width="${size.w}" height="${size.h}">
+      <defs>
+        <linearGradient id="arcg-${id}" x1="0" x2="1">
+          <stop offset="0" stop-color="#f2c94c" stop-opacity="0"/><stop offset=".5" stop-color="#f2c94c"/><stop offset="1" stop-color="#f2c94c" stop-opacity="0"/>
+        </linearGradient>
+        <radialGradient id="dome-${id}" cx="50%" cy="0%" r="90%">
+          <stop offset="0" stop-color="${offer.theme.glow}" stop-opacity=".6"/><stop offset=".6" stop-color="#0a0a0a" stop-opacity=".2"/><stop offset="1" stop-color="#0a0a0a" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <path d="M ${cx - R} ${cy} A ${R} ${R} 0 0 1 ${cx + R} ${cy} Z" fill="url(#dome-${id})"/>
+      ${arc(R, Math.max(2, 4 * k), 0.9)}
+      ${arc(R + 40 * k, Math.max(1, 2 * k), 0.55, `${160 * k} ${40 * k} ${60 * k} ${40 * k}`)}
+      ${arc(R + 80 * k, 1.2, 0.35, `${60 * k} ${30 * k}`)}
+      ${arc(R - 46 * k, Math.max(1, 2 * k), 0.4, `${220 * k} ${60 * k}`)}
+    </svg>
+    ${decoHTML(size, lang, rtl)}
+    ${items}
+    ${slot}`;
+}
+
+function arcBannerHTML(offer, size, lang, cls, style) {
+  const rtl = lang === "ar";
+  const cta = `<span class="cta">${txt(offer.cta[lang])}<span class="arrow">${rtl ? "←" : "→"}</span></span>`;
+  const vertical = size.id === "mobile-vertical-hero";
+  const sticker = vertical || size.id === "desktop-hero";
+  return `
+    <div class="banner arcb ${cls} ${sticker ? "has-sticker" : ""}" dir="${rtl ? "rtl" : "ltr"}" lang="${lang}"
+         data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png" style="${style}">
+      ${sticker ? stickerHTML({ ...offer, stickerBadge: null }, lang) : ""}
+      ${arcStageHTML(offer, size, lang)}
+      ${vertical ? `
+        <div class="arc-top">
+          ${logoHTML(lang)}
+          <h2 class="headline">${txt(offer.headline[lang], "hl-num")}</h2>
+          ${offer.sub[lang] ? `<p class="sub">${txt(offer.sub[lang])}</p>` : ""}
+        </div>
+        <div class="arc-cta">${cta}</div>` : `
+        <div class="copy">
+          ${logoHTML(lang)}
+          <div class="badge">${txt(offer.badge[lang])}</div>
+          <h2 class="headline">${txt(offer.headline[lang], "hl-num")}</h2>
+          ${offer.sub[lang] ? `<p class="sub">${txt(offer.sub[lang])}</p>` : ""}
+          <div class="actions">${cta}</div>
+        </div>`}
+    </div>`;
+}
+
 function bannerHTML(offer, size, lang) {
   const t = offer.theme;
   const products = offer.products.slice(0, size.maxProducts);
   const showNames = size.id === "mobile-vertical-hero" || size.id === "desktop-hero";
   const code = offer.code?.[lang];
+  if (offer.layout === "arc" && ARC_STAGE[size.id]) {
+    return arcBannerHTML(offer, size, lang, `${offer.id} ${size.id} hl-${window.HL_STYLE || HEADLINE_STYLE} pat-${window.PATTERN_OVERRIDE || PATTERN} n${products.length}`,
+      `width:${size.w}px;height:${size.h}px;--from:${t.from};--to:${t.to};--accent:${t.accent};--glow:${t.glow || t.to};--text:${t.text}`);
+  }
   if ((window.ARC_OVERRIDE ?? ARC) && size.id === "mobile-vertical-hero") {
     return arcVerticalHTML(offer, size, lang, `${offer.id} ${size.id} hl-${window.HL_STYLE || HEADLINE_STYLE} pat-${window.PATTERN_OVERRIDE || PATTERN} n${products.length}`,
       `width:${size.w}px;height:${size.h}px;--from:${t.from};--to:${t.to};--accent:${t.accent};--glow:${t.glow || t.to};--text:${t.text}`);

@@ -520,3 +520,28 @@ img.logo { object-fit: contain; }
 .arc-item img { max-width: 200px; }
 .arc .arc-glow { display: none; }
 .arc-cta { bottom: 60px; }
+
+/* ---------- ARC layout (offer.layout = "arc") ---------- */
+.banner.arcb .arc-deco { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.banner.arcb .arc-lines { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.banner.arcb .arc-item { position: absolute; z-index: 3; transform-origin: 50% 100%; filter: drop-shadow(0 10px 14px rgba(0,0,0,.65)); display: flex; justify-content: center; align-items: flex-end; }
+.banner.arcb .arc-item img { height: 100%; width: 100%; object-fit: contain; object-position: bottom; display: block; }
+.banner.arcb .arc-slot { position: absolute; z-index: 3; object-fit: contain; }
+.banner.arcb .copy { z-index: 4; }
+.banner.arcb.mobile-vertical-hero { display: block; }
+.banner.arcb .arc-top { position: absolute; z-index: 4; top: 50px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+.banner.arcb .arc-top img.logo { height: 70px; margin-bottom: 18px; }
+.banner.arcb .arc-top .headline { font-size: 76px; }
+.banner.arcb[dir="rtl"] .arc-top .headline { font-size: 66px; }
+.banner.arcb .arc-top .sub { font-size: 26px; }
+.banner.arcb .arc-cta { position: absolute; z-index: 4; left: 0; right: 0; bottom: 70px; display: flex; justify-content: center; }
+.banner.arcb .arc-cta .cta { font-size: 30px; padding: 18px 54px; }
+.banner.arcb.mobile-vertical-hero .bf-sticker { width: 200px; top: 14px; inset-inline-start: auto; inset-inline-end: 10px; }
+.banner.arcb.desktop-hero .bf-sticker { width: 150px; top: 6px; inset-inline-start: auto; inset-inline-end: 14px; }
+.banner.arcb.desktop-hero .copy { flex-basis: 470px; }
+.banner.arcb.desktop-hero .badge { visibility: visible; }
+.banner.arcb.mobile-hero .copy { flex-basis: 270px; }
+.banner.arcb.mobile-hero .headline { font-size: 32px; }
+.banner.arcb.mobile-slim .copy { flex: 0 0 300px; }
+.banner.arcb.mobile-slim .headline { font-size: 28px; }
+.banner.arcb.mobile-slim::after { display: none; }
