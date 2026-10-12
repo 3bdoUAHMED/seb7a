@@ -315,6 +315,7 @@ const STUDIO_GEO = {
   "mobile-slim": { k: 1, ox: 0, oy: 0 },
   "desktop-hero": { k: 1.5, ox: 240, oy: 0 },
   "mobile-hero": { k: 1.25, ox: 0, oy: 70, logo: true },
+  "mobile-vertical-hero": { k: 1, ox: 0, oy: 0, noProducts: true },
 };
 
 // "Scene" layout: photo wall, stone ledge, products standing on it, 3D "50% OFF".
@@ -331,7 +332,7 @@ function sceneBannerHTML(offer, size, lang, style) {
     const g = STUDIO_GEO[size.id];
     // product spots in the original 800x200 photo: [centre x, bottom y, height]
     const spots = [[288, 188, 176], [418, 184, 134], [536, 186, 164]];
-    const prods = offer.products.map((p, i) => {
+    const prods = g.noProducts ? "" : offer.products.map((p, i) => {
       const [cx, by, h] = spots[i];
       return `<img class="st-abs" src="${esc(p.image)}" alt=""
         style="left:${g.ox + cx * g.k}px;top:${g.oy + by * g.k}px;height:${h * g.k}px">`;

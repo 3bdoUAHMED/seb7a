@@ -719,3 +719,13 @@ img.logo { object-fit: contain; }
 .studio.mobile-hero .bf-sticker { left: 580px; top: 2px; }
 .sc-big:has(.ar-lock) .sc-line.red { top: -.42em; right: 0; width: 62%; }
 .studio.mobile-slim[dir="rtl"] .ph-copy { top: 30px; }
+/* 800 x 1200 studio (photo already has logo + products) */
+.studio.mobile-vertical-hero .ph-copy { left: 0; right: 0; top: 190px; gap: 0; }
+.studio.mobile-vertical-hero .sc-big { font-size: 190px; }
+[dir="rtl"].studio.mobile-vertical-hero .sc-big { font-size: 180px; }
+.studio.mobile-vertical-hero .st-cta { position: absolute; top: 850px; font-size: 30px; padding: 18px 50px; }
+.studio.mobile-vertical-hero .bf-sticker { width: 190px; top: 14px; left: 14px; }
+[dir="rtl"].studio.mobile-vertical-hero .bf-sticker { left: auto; right: 14px; }
+[dir="rtl"].studio.mobile-vertical-hero .ph-copy { top: 250px; }
+[dir="rtl"].studio.mobile-vertical-hero .sc-line.red { top: -.3em; }
+[dir="rtl"].studio.mobile-vertical-hero .st-cta { top: 790px; }
