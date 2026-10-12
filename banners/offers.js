@@ -29,6 +29,9 @@ const HEADLINE_STYLE = "plain";
 // Background pattern: "blackfriday" | "studio" (plain + product pedestals) | "circles" | "waves" | "leaves" | "glow"
 const PATTERN = "blackfriday";
 
+// Show the round BLACK FRIDAY sticker (replaces the pill badge)
+const STICKER = false;
+
 const OFFERS = [
   {
     id: "offer-1",

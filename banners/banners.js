@@ -18,6 +18,25 @@ function keepTogether(name) {
   return name.replace(/Bio-Activ/g, "Bio\u2011Activ").replace(/بيو أكتيف/g, "بيو\u00a0أكتيف");
 }
 
+// Starburst BLACK FRIDAY sticker.
+function stickerHTML(lang) {
+  const pts = [];
+  for (let i = 0; i < 48; i++) {
+    const r = i % 2 ? 46 : 50, a = (Math.PI * 2 * i) / 48;
+    pts.push(`${(50 + r * Math.cos(a)).toFixed(2)},${(50 + r * Math.sin(a)).toFixed(2)}`);
+  }
+  const words = lang === "ar" ? ["بلاك", "فرايداي"] : ["BLACK", "FRIDAY"];
+  return `
+    <div class="bf-sticker" lang="${lang}">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <polygon points="${pts.join(" ")}" fill="#0a0a0a" stroke="#f2c94c" stroke-width="1.6"/>
+        <circle cx="50" cy="50" r="38" fill="none" stroke="#f2c94c" stroke-width=".8" stroke-dasharray="2 2"/>
+      </svg>
+      <span class="bf-top">${words[0]}</span>
+      <span class="bf-bottom">${words[1]}</span>
+    </div>`;
+}
+
 // Simple bottle drawing used until a real product photo is set.
 
 function placeholderProduct(name, theme, i) {
@@ -64,10 +83,10 @@ function bannerHTML(offer, size, lang) {
   const showNames = size.id === "mobile-vertical-hero" || size.id === "desktop-hero";
   const code = offer.code?.[lang];
   return `
-    <div class="banner ${offer.id} ${size.id} hl-${window.HL_STYLE || HEADLINE_STYLE} pat-${window.PATTERN_OVERRIDE || PATTERN} n${products.length}${products.length >= 5 ? " many" : ""}" dir="${lang === "ar" ? "rtl" : "ltr"}" lang="${lang}"
+    <div class="banner ${offer.id} ${size.id} ${(window.STICKER_OVERRIDE ?? STICKER) ? "has-sticker" : ""} hl-${window.HL_STYLE || HEADLINE_STYLE} pat-${window.PATTERN_OVERRIDE || PATTERN} n${products.length}${products.length >= 5 ? " many" : ""}" dir="${lang === "ar" ? "rtl" : "ltr"}" lang="${lang}"
          data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png"
          style="width:${size.w}px;height:${size.h}px;--from:${t.from};--to:${t.to};--accent:${t.accent};--glow:${t.glow || t.to};--text:${t.text}">
-      <div class="deco deco-1"></div><div class="deco deco-2"></div><div class="deco deco-3"></div>
+      ${(window.STICKER_OVERRIDE ?? STICKER) ? stickerHTML(lang) : ""}<div class="deco deco-1"></div><div class="deco deco-2"></div><div class="deco deco-3"></div>
       <div class="copy">
         ${logoHTML(lang)}
         <div class="badge">${txt(offer.badge[lang])}</div>
