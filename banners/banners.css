@@ -412,9 +412,10 @@ img.logo { object-fit: contain; }
 
 /* ---------- BLACK FRIDAY ribbon sticker ---------- */
 .has-sticker .badge { visibility: hidden; }
-.bf-sticker { position: absolute; z-index: 3; aspect-ratio: 420 / 330; filter: drop-shadow(0 6px 10px rgba(0,0,0,.45)); }
+.bf-sticker { position: absolute; z-index: 3; aspect-ratio: 450 / 350; filter: drop-shadow(0 6px 10px rgba(0,0,0,.45)); }
 .bf-sticker svg { display: block; width: 100%; height: 100%; }
-.mobile-vertical-hero .bf-sticker { width: 230px; top: 6px; inset-inline-start: 8px; }
+.mobile-vertical-hero .bf-sticker { width: 228px; top: 8px; inset-inline-start: 6px; }
 .desktop-hero .bf-sticker { width: 190px; top: 40px; inset-inline-start: 520px; }
 .mobile-hero .bf-sticker { width: 130px; top: 4px; inset-inline-start: 240px; }
 .mobile-slim .bf-sticker { width: 110px; top: 40px; inset-inline-start: 300px; }
+.mobile-vertical-hero[dir="rtl"] .bf-sticker { inset-inline-start: 20px; }

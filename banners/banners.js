@@ -24,10 +24,18 @@ function stickerHTML(offer, lang) {
   const [l1, l2 = ""] = (offer.stickerBadge?.[lang] ?? "").split("|");
   const badgeFont = /[\u0600-\u06ff]/.test(l1 + l2) ? "Cairo" : "Anton";
   const long = Math.max(l1.length, l2.length) > 5;
-  const fs = long ? 17 : 26;
+  const fs = long ? 22 : 34;
+  const gid = `bfg-${offer.id}-${lang}`;
+  // Extruded 3D text: stacked dark copies under a white face.
+  const line3d = (t, x, y, size) => {
+    const attrs = `text-anchor="middle" font-family="${badgeFont}, sans-serif" font-weight="900" font-size="${size}"`;
+    let out = "";
+    for (let d = 5; d >= 1; d--) out += `<text x="${x + d * 0.7}" y="${y + d}" ${attrs} fill="#3a0505">${esc(t)}</text>`;
+    return out + `<text x="${x}" y="${y}" ${attrs} fill="#fff" stroke="#ffe3b0" stroke-width=".6">${esc(t)}</text>`;
+  };
   return `
     <div class="bf-sticker">
-      <svg viewBox="0 0 420 330" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 450 350" xmlns="http://www.w3.org/2000/svg">
         <g transform="rotate(-24 210 170)">
           <path d="M28 168 l14 26 29 4 -21 20 5 29 -27 -14 -26 14 5 -29 -21 -20 29 -4z" fill="#d42a2a"/>
           <path d="M100 70 H370 L346 112 L370 154 H100 Z" fill="#d42a2a"/>
@@ -37,10 +45,17 @@ function stickerHTML(offer, lang) {
           <text x="208" y="222" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="500" font-size="54" fill="#d42a2a">FRIDAY</text>
         </g>
         ${l1 ? `
-        <g transform="rotate(-20 352 230)">
-          <circle cx="352" cy="230" r="58" fill="#9b1b1b"/>
-          <text x="352" y="${l2 ? 226 : 240}" text-anchor="middle" font-family="${badgeFont}, sans-serif" font-weight="900" font-size="${fs + 4}" fill="#fff">${esc(l1)}</text>
-          ${l2 ? `<text x="352" y="${226 + fs + 4}" text-anchor="middle" font-family="${badgeFont}, sans-serif" font-weight="900" font-size="${fs}" fill="#fff">${esc(l2)}</text>` : ""}
+        <defs>
+          <radialGradient id="${gid}" cx="38%" cy="30%" r="75%">
+            <stop offset="0" stop-color="#ff5a4f"/><stop offset=".55" stop-color="#c41f1f"/><stop offset="1" stop-color="#7a0f0f"/>
+          </radialGradient>
+        </defs>
+        <g transform="rotate(-20 368 250)">
+          <circle cx="374" cy="261" r="74" fill="#4a0707"/>
+          <circle cx="368" cy="250" r="74" fill="url(#${gid})" stroke="#ffd5c2" stroke-opacity=".5" stroke-width="2"/>
+          <ellipse cx="346" cy="212" rx="38" ry="17" fill="#fff" opacity=".22"/>
+          ${line3d(l1, 368, l2 ? 245 : 262, fs + 8)}
+          ${l2 ? line3d(l2, 368, 245 + fs + 8, fs + 2) : ""}
         </g>` : ""}
       </svg>
     </div>`;
