@@ -66,7 +66,7 @@ function bannerHTML(offer, size, lang) {
   return `
     <div class="banner ${offer.id} ${size.id} hl-${window.HL_STYLE || HEADLINE_STYLE} pat-${window.PATTERN_OVERRIDE || PATTERN} n${products.length}${products.length >= 5 ? " many" : ""}" dir="${lang === "ar" ? "rtl" : "ltr"}" lang="${lang}"
          data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png"
-         style="width:${size.w}px;height:${size.h}px;--from:${t.from};--to:${t.to};--accent:${t.accent};--text:${t.text}">
+         style="width:${size.w}px;height:${size.h}px;--from:${t.from};--to:${t.to};--accent:${t.accent};--glow:${t.glow || t.to};--text:${t.text}">
       <div class="deco deco-1"></div><div class="deco deco-2"></div><div class="deco deco-3"></div>
       <div class="copy">
         ${logoHTML(lang)}

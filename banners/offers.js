@@ -26,14 +26,14 @@ const BRAND = {
 // How the numbers in the headline look: "plain" | "tilt" | "tag" | "sticker"
 const HEADLINE_STYLE = "plain";
 
-// Background pattern: "studio" (plain + product pedestals) | "circles" | "waves" | "leaves" | "glow"
-const PATTERN = "circles";
+// Background pattern: "blackfriday" | "studio" (plain + product pedestals) | "circles" | "waves" | "leaves" | "glow"
+const PATTERN = "blackfriday";
 
 const OFFERS = [
   {
     id: "offer-1",
-    theme: { from: "#7a1e2c", to: "#d63447", accent: "#ffe66d", text: "#ffffff" },
-    badge: { en: "LIMITED TIME", ar: "لفترة محدودة" },
+    theme: { from: "#0a0a0a", to: "#1a1a1a", accent: "#f2c94c", glow: "#d63447", text: "#ffffff" },
+    badge: { en: "BLACK FRIDAY", ar: "بلاك فرايداي" },
     headline: { en: "Up to 40% OFF", ar: "خصم يصل إلى 40%" },
     sub: { en: "On Bioxcin hair care favourites", ar: "على منتجات بيوكسين للعناية بالشعر" },
     cta: { en: "Shop Now", ar: "تسوّق الآن" },
@@ -47,8 +47,8 @@ const OFFERS = [
   },
   {
     id: "offer-2",
-    theme: { from: "#7a2034", to: "#b23a55", accent: "#f2cf7a", text: "#ffffff" },
-    badge: { en: "LIMITED TIME", ar: "لفترة محدودة" },
+    theme: { from: "#0a0a0a", to: "#1a1a1a", accent: "#f2c94c", glow: "#b23a55", text: "#ffffff" },
+    badge: { en: "BLACK FRIDAY", ar: "بلاك فرايداي" },
     headline: { en: "Buy 2 Get 2", ar: "اشترِ 2 واحصل على 2" },
     sub: { en: "On Bioxcin hair care favourites", ar: "على منتجات بيوكسين للعناية بالشعر" },
     cta: { en: "Shop Now", ar: "تسوّق الآن" },
@@ -69,8 +69,8 @@ const OFFERS = [
   },
   {
     id: "offer-3",
-    theme: { from: "#0b1d4d", to: "#1f3f8f", accent: "#f2cf7a", text: "#ffffff" },
-    badge: { en: "LIMITED TIME", ar: "لفترة محدودة" },
+    theme: { from: "#0a0a0a", to: "#1a1a1a", accent: "#f2c94c", glow: "#2f5fd0", text: "#ffffff" },
+    badge: { en: "BLACK FRIDAY", ar: "بلاك فرايداي" },
     headline: { en: "Buy 1 Get 50% OFF", ar: "اشترِ 1 واحصل على خصم 50%" },
     sub: { en: "", ar: "" },
     cta: { en: "Shop Now", ar: "تسوّق الآن" },
