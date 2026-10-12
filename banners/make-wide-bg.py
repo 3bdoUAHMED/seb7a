@@ -26,15 +26,17 @@ v = Image.open(here / "products/offer3-vertical-src.png").convert("RGB")
 cut = 926
 canvas = Image.new("RGB", (800, 1200))
 canvas.paste(v.crop((0, 0, 800, cut)), (0, 0))
-st = Image.open(here / "products/offer3-stone.jpg").convert("RGB")
-stone = Image.new("RGB", (800, 274))
-for i, y in enumerate(range(0, 274, st.height)):
-    stone.paste(st.crop((i * 400, 0, i * 400 + 800, st.height)), (0, y))
+# polished stone floor: base tone sampled from the step + a fading reflection of the scene
 import numpy as np
-s = np.asarray(stone).astype(np.float32)
-grad = np.linspace(1.0, 0.86, s.shape[0])[:, None, None]
-s = s * grad
-s[:3] = s[:3] * 1.06          # bright top edge of the step
-s[3:14] *= np.linspace(0.85, 1, 11)[:, None, None]   # contact shadow just under the edge
-canvas.paste(Image.fromarray(s.clip(0, 255).astype(np.uint8)), (0, cut))
+from PIL import ImageFilter
+H = 1200 - cut
+base = np.asarray(v.crop((300, cut - 14, 500, cut - 4))).reshape(-1, 3).mean(0)
+refl = np.asarray(v.crop((0, cut - H, 800, cut)).transpose(Image.FLIP_TOP_BOTTOM)
+                  .filter(ImageFilter.GaussianBlur(2.5))).astype(np.float32)
+fade = np.linspace(0.38, 0.0, H)[:, None, None]
+shade = np.linspace(1.0, 0.9, H)[:, None, None]
+floor = (base * (1 - fade) + refl * fade) * shade
+floor[:2] = floor[:2] * 1.05                    # thin bright edge of the step
+floor[2:16] *= np.linspace(0.88, 1, 14)[:, None, None]
+canvas.paste(Image.fromarray(floor.clip(0, 255).astype(np.uint8)), (0, cut))
 canvas.save(here / "products/offer3-bg-800x1200.jpg", quality=93)
