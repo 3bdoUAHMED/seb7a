@@ -369,11 +369,46 @@ function sceneBannerHTML(offer, size, lang, style) {
     </div>`;
 }
 
+// Offer 2 "podium" layout: podium photo + burgundy BUY 2 GET 2 FREE lockup.
+function b2g2Lockup(lang) {
+  if (lang === "en") return `<img class="pd-type" src="products/offer2-type-en.png" alt="Buy 2 Get 2 Free">`;
+  return `
+    <div class="pd-type ar" dir="rtl">
+      <span class="q">”</span>
+      <div class="ar-l1">اشترِ <b>2</b></div>
+      <div class="ar-l2">واحصل على <b>2</b></div>
+      <div class="ar-free">مجاناً</div>
+      <span class="q end">“</span>
+    </div>`;
+}
+
+function podiumBannerHTML(offer, size, lang, style) {
+  const rtl = lang === "ar";
+  const vertical = size.id === "mobile-vertical-hero";
+  const bg = vertical ? "products/offer2-podium.jpg" : `products/offer2-bg-${size.w}x${size.h}.jpg`;
+  return `
+    <div class="banner podium ${offer.id} ${size.id}" dir="${rtl ? "rtl" : "ltr"}" lang="${lang}"
+         data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png"
+         style="${style};background:url('${bg}') 0 0/100% 100%">
+      <img class="pd-logo" src="products/bioxcin-logo-red.png" alt="BIOXCIN">
+      ${stickerHTML({ ...offer, stickerBadge: null }, lang)}
+      <div class="pd-copy">
+        ${b2g2Lockup(lang)}
+        <span class="st-cta">${txt(offer.cta[lang])}
+          <svg viewBox="0 0 24 24"><path d="${rtl ? "M15 6l-6 6 6 6" : "M9 6l6 6-6 6"}" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </div>
+    </div>`;
+}
+
 function bannerHTML(offer, size, lang) {
   const t = offer.theme;
   const products = offer.products.slice(0, size.maxProducts);
   const showNames = size.id === "mobile-vertical-hero" || size.id === "desktop-hero";
   const code = offer.code?.[lang];
+  if (offer.layout === "podium") {
+    return podiumBannerHTML(offer, size, lang, `width:${size.w}px;height:${size.h}px`);
+  }
   if (offer.layout === "scene") {
     return sceneBannerHTML(offer, size, lang, `width:${size.w}px;height:${size.h}px;--accent:${t.accent}`);
   }

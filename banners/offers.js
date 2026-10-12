@@ -60,6 +60,8 @@ const OFFERS = [
  },
   {
     id: "offer-2",
+    layout: "podium", // podium photo + "BUY 2 GET 2 FREE" lockup
+    sticker: ["YELLOW", "NOVEMBER"],
     theme: { from: "#0a0a0a", to: "#1a1a1a", accent: "#f2c94c", glow: "#b23a55", text: "#ffffff" },
     stickerBadge: { en: "BUY 2|GET 2", ar: "BUY 2|GET 2" }, // round badge on the BLACK FRIDAY sticker ("|" = new line)
     badge: { en: "BLACK FRIDAY", ar: "بلاك فرايداي" },
