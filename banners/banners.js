@@ -18,22 +18,13 @@ function keepTogether(name) {
   return name.replace(/Bio-Activ/g, "Bio\u2011Activ").replace(/بيو أكتيف/g, "بيو\u00a0أكتيف");
 }
 
-// Starburst BLACK FRIDAY sticker.
+// BLACK FRIDAY typographic sticker: outlined "BLACK" over a gold "FRIDAY" slab.
 function stickerHTML(lang) {
-  const pts = [];
-  for (let i = 0; i < 48; i++) {
-    const r = i % 2 ? 46 : 50, a = (Math.PI * 2 * i) / 48;
-    pts.push(`${(50 + r * Math.cos(a)).toFixed(2)},${(50 + r * Math.sin(a)).toFixed(2)}`);
-  }
-  const words = lang === "ar" ? ["بلاك", "فرايداي"] : ["BLACK", "FRIDAY"];
   return `
-    <div class="bf-sticker" lang="${lang}">
-      <svg viewBox="0 0 100 100" aria-hidden="true">
-        <polygon points="${pts.join(" ")}" fill="#0a0a0a" stroke="#f2c94c" stroke-width="1.6"/>
-        <circle cx="50" cy="50" r="38" fill="none" stroke="#f2c94c" stroke-width=".8" stroke-dasharray="2 2"/>
-      </svg>
-      <span class="bf-top">${words[0]}</span>
-      <span class="bf-bottom">${words[1]}</span>
+    <div class="bf-sticker">
+      <span class="bf-black">BLACK</span>
+      <span class="bf-friday">FRIDAY</span>
+      <span class="bf-sale">${lang === "ar" ? "عروض حصرية" : "SALE"}</span>
     </div>`;
 }
 
