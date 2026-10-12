@@ -320,15 +320,22 @@ function sceneBannerHTML(offer, size, lang, style) {
             : `${word3d(offer.big.num, "white")}${word3d(offer.big.word.en, "red")}`}
       <i class="sc-line white"></i>
     </div>`;
-  if (offer.wideBg?.[size.id]) {
+  if (offer.studio && size.id !== "mobile-vertical-hero") {
+    const prods = offer.products.map((p) =>
+      `<div class="st-p" style="--h:${p.h}"><img src="${esc(p.image)}" alt=""></div>`).join("");
     return `
-    <div class="banner scene photo ${offer.id} ${size.id}" dir="${rtl ? "rtl" : "ltr"}" lang="${lang}"
-         data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png"
-         style="${style};background:url('${esc(offer.wideBg[size.id])}') 0 0/100% 100%">
+    <div class="banner scene studio ${offer.id} ${size.id}" dir="${rtl ? "rtl" : "ltr"}" lang="${lang}"
+         data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png" style="${style}">
+      <div class="st-wall"></div>
+      <div class="st-ledge"></div>
+      <div class="st-products">${prods}</div>
+      <img class="st-logo" src="products/bioxcin-logo-red.png" alt="BIOXCIN">
       ${stickerHTML({ ...offer, stickerBadge: null }, lang)}
       <div class="ph-copy">
         ${big}
-        <span class="cta">${txt(offer.cta[lang])}<span class="arrow">${rtl ? "←" : "→"}</span></span>
+        <span class="st-cta">${txt(offer.cta[lang])}
+          <svg viewBox="0 0 24 24"><path d="${rtl ? "M15 6l-6 6 6 6" : "M9 6l6 6-6 6"}" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
       </div>
     </div>`;
   }

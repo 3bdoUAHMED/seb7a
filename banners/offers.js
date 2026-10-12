@@ -84,8 +84,7 @@ const OFFERS = [
   {
     id: "offer-3",
     layout: "scene", // photo wall + stone ledge, 3D "50% OFF", ribbon sticker
-    // ready-made photo backgrounds for the wide sizes (built by make-wide-bg.py)
-    wideBg: { "desktop-hero": "products/offer3-bg-1440x300.jpg", "mobile-hero": "products/offer3-bg-706x320.jpg", "mobile-slim": "products/offer3-bg-800x200.jpg" },
+    studio: true, // wide sizes: wall photo + stone ledge + crisp product cutouts
     sticker: ["YELLOW", "NOVEMBER"],
     big: { num: "50%", word: { en: "OFF", ar: "خصم" } },
     theme: { from: "#0a0a0a", to: "#1a1a1a", accent: "#f2c94c", glow: "#2f5fd0", text: "#ffffff" },

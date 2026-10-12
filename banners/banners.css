@@ -645,3 +645,61 @@ img.logo { object-fit: contain; }
 .banner.scene.photo.mobile-hero .bf-sticker { left: 590px; }
 .banner.scene.photo .sc-big { order: 0; margin: 0 !important; }
 .banner.scene.photo .cta { order: 1; position: static; }
+
+/* ---------- STUDIO variant (offer 3 wide sizes) ---------- */
+.banner.studio { background: #d9c7ad; }
+.studio .st-wall { position: absolute; inset: 0 0 var(--ledgeH) 0; background: url("products/offer3-wall.jpg") center 35%/cover no-repeat; }
+.studio .st-ledge { position: absolute; left: 0; right: 0; bottom: 0; height: var(--ledgeH);
+  background: linear-gradient(180deg, #f4ece0 0, #ece2d2 7px, transparent 8px), url("products/offer3-stone.jpg") 0 0/auto 100% repeat-x;
+  box-shadow: 0 -1px 0 rgba(120,95,60,.25); }
+.studio .st-ledge::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 30%, rgba(90,65,35,.18)); }
+.studio .st-products { position: absolute; z-index: 2; bottom: calc(var(--ledgeH) - 6px); display: flex; align-items: flex-end; gap: var(--gap); }
+.studio .st-p { position: relative; height: calc(var(--ph) * var(--h)); display: flex; align-items: flex-end; }
+.studio .st-p img { height: 100%; width: auto; display: block; filter: drop-shadow(6px 6px 7px rgba(70,45,20,.35)); }
+.studio .st-p::after { content: ""; position: absolute; left: 6%; right: -12%; bottom: -5px; height: 10px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(60,40,15,.45), transparent); z-index: -1; }
+.studio .st-logo { position: absolute; z-index: 3; height: var(--logoH); }
+.studio .ph-copy { position: absolute; z-index: 3; display: flex; flex-direction: column; align-items: center; }
+.studio .sc-big { transform: rotate(-6deg); margin: 0 !important; }
+.studio .st-cta { display: inline-flex; align-items: center; gap: .45em; background: #8b1c2c; color: #fff;
+  font-family: Poppins, Cairo, sans-serif; font-weight: 600; line-height: 1; border-radius: 999px; white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(80,20,25,.3); }
+[dir="rtl"].studio .st-cta { font-family: Cairo, sans-serif; font-weight: 700; }
+.studio .st-cta svg { width: 1.05em; height: 1.05em; }
+.banner.studio .bf-sticker { inset-inline-start: auto; inset-inline-end: auto; }
+
+/* 800 x 200 */
+.studio.mobile-slim { --ledgeH: 30px; --ph: 150px; --gap: 18px; --logoH: 34px; }
+.studio.mobile-slim .st-products { left: 268px; }
+.studio.mobile-slim .ph-copy { left: 16px; width: 236px; top: 26px; gap: 16px; }
+.studio.mobile-slim .sc-big { font-size: 64px; }
+.studio.mobile-slim .st-cta { font-size: 13px; padding: 8px 18px; }
+.studio.mobile-slim .st-logo { right: 22px; top: 22px; }
+.studio.mobile-slim .bf-sticker { width: 104px; left: 666px; top: 74px; }
+
+/* 1440 x 300 */
+.studio.desktop-hero { --ledgeH: 46px; --ph: 220px; --gap: 34px; --logoH: 58px; }
+.studio.desktop-hero .st-products { left: 500px; }
+.studio.desktop-hero .ph-copy { left: 50px; width: 400px; top: 42px; gap: 30px; }
+.studio.desktop-hero .sc-big { font-size: 108px; }
+.studio.desktop-hero .st-cta { font-size: 18px; padding: 12px 30px; }
+.studio.desktop-hero .st-logo { right: 50px; top: 38px; }
+.studio.desktop-hero .bf-sticker { width: 160px; left: 1210px; top: 112px; }
+
+/* 706 x 320 */
+.studio.mobile-hero { --ledgeH: 44px; --ph: 215px; --gap: 18px; --logoH: 32px; }
+.studio.mobile-hero .st-products { right: 22px; }
+.studio.mobile-hero .ph-copy { left: 14px; width: 262px; top: 98px; gap: 26px; }
+.studio.mobile-hero .sc-big { font-size: 72px; }
+.studio.mobile-hero .st-cta { font-size: 15px; padding: 10px 24px; }
+.studio.mobile-hero .st-logo { left: 22px; top: 22px; }
+.studio.mobile-hero .bf-sticker { width: 104px; left: 594px; top: 0; }
+.studio .sc-big { order: 0; }
+.studio .st-cta { order: 1; }
+.studio .st-wall { background-position: 70% 20%; filter: brightness(1.32) saturate(.9); }
+/* clean studio wall in the photo's tone: warm beige, soft diagonal shadow, fine grain */
+.studio .st-wall { filter: none; background:
+  url("products/wall-grain.png") 0 0/256px 256px,
+  linear-gradient(115deg, rgba(95,70,40,.30) 0%, rgba(95,70,40,.22) 18%, transparent 34%, transparent 58%, rgba(95,70,40,.14) 70%, rgba(255,255,255,.18) 82%, transparent 92%),
+  radial-gradient(ellipse 60% 120% at 62% 0%, #f1e6d6, transparent 70%),
+  linear-gradient(180deg, #e3d4bf, #d6c3a8); }
