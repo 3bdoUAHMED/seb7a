@@ -35,6 +35,9 @@ const STICKER = false;
 // "Big number" hero concept: a giant 3D discount number with the products in front of it.
 const HERO = false;
 
+// "Arc" concept: products fanned out along a half circle with motion arcs behind them.
+const ARC = false;
+
 const OFFERS = [
   {
     id: "offer-1",

@@ -134,11 +134,67 @@ function heroVerticalHTML(offer, size, lang, cls, style) {
     </div>`;
 }
 
+// Products fanned along a half circle (dome). Each product stands on the arc,
+// tilted outward; the middle ones are biggest. Gold arcs behind suggest motion.
+function arcVerticalHTML(offer, size, lang, cls, style) {
+  const products = offer.products.slice(0, size.maxProducts);
+  const n = products.length;
+  const cx = size.w / 2, cy = 1240, R = 520;
+  const maxA = n > 5 ? 38 : 30;
+  const base = n > 5 ? 260 : 340;
+  const items = products.map((p, i) => {
+    const a = n === 1 ? 0 : -maxA + (2 * maxA * i) / (n - 1);
+    const rad = (a * Math.PI) / 180;
+    const x = cx + R * Math.sin(rad), y = cy - R * Math.cos(rad);
+    const h = base * (1 - 0.32 * Math.abs(a) / maxA) * (p.scale ?? 1);
+    return `
+      <div class="arc-item" style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px;height:${h.toFixed(0)}px;transform:translate(-50%,-100%) rotate(${(a * 0.5).toFixed(1)}deg)">
+        ${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name?.[lang] ?? "")}">` : ""}
+      </div>`;
+  }).join("");
+  // concentric motion arcs (upper half circles)
+  const arc = (r, w, op, dash) =>
+    `<path d="M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}" fill="none" stroke="url(#arcg-${offer.id}-${lang})" stroke-width="${w}" stroke-opacity="${op}" stroke-linecap="round" ${dash ? `stroke-dasharray="${dash}"` : ""}/>`;
+  const svg = `
+    <svg class="arc-lines" viewBox="0 0 ${size.w} ${size.h}" width="${size.w}" height="${size.h}">
+      <defs><linearGradient id="arcg-${offer.id}-${lang}" x1="0" x2="1">
+        <stop offset="0" stop-color="#f2c94c" stop-opacity="0"/><stop offset=".5" stop-color="#f2c94c"/><stop offset="1" stop-color="#f2c94c" stop-opacity="0"/>
+      </linearGradient>
+      <radialGradient id="dome-${offer.id}-${lang}" cx="50%" cy="0%" r="90%">
+        <stop offset="0" stop-color="${offer.theme.glow || "#d63447"}" stop-opacity=".55"/><stop offset=".6" stop-color="#0a0a0a" stop-opacity=".2"/><stop offset="1" stop-color="#0a0a0a" stop-opacity="0"/>
+      </radialGradient></defs>
+      <path d="M ${cx - R} ${cy} A ${R} ${R} 0 0 1 ${cx + R} ${cy} Z" fill="url(#dome-${offer.id}-${lang})"/>
+      ${arc(R, 4, 0.9)}
+      ${arc(R + 40, 2, 0.55, "160 40 60 40")}
+      ${arc(R + 80, 1.5, 0.35, "60 30")}
+      ${arc(R - 46, 2, 0.4, "220 60")}
+      ${arc(R + 130, 1, 0.25)}
+    </svg>`;
+  return `
+    <div class="banner arc ${cls}" dir="${lang === "ar" ? "rtl" : "ltr"}" lang="${lang}"
+         data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png" style="${style}">
+      ${stickerHTML({ ...offer, stickerBadge: null }, lang)}
+      ${svg}
+      <div class="arc-glow" style="left:${cx}px;top:${cy}px"></div>
+      <div class="arc-top">
+        ${logoHTML(lang)}
+        <h2 class="headline">${txt(offer.headline[lang], "hl-num")}</h2>
+        ${offer.sub[lang] ? `<p class="sub">${txt(offer.sub[lang])}</p>` : ""}
+      </div>
+      ${items}
+      <div class="arc-cta"><span class="cta">${txt(offer.cta[lang])}<span class="arrow">${lang === "ar" ? "←" : "→"}</span></span></div>
+    </div>`;
+}
+
 function bannerHTML(offer, size, lang) {
   const t = offer.theme;
   const products = offer.products.slice(0, size.maxProducts);
   const showNames = size.id === "mobile-vertical-hero" || size.id === "desktop-hero";
   const code = offer.code?.[lang];
+  if ((window.ARC_OVERRIDE ?? ARC) && size.id === "mobile-vertical-hero") {
+    return arcVerticalHTML(offer, size, lang, `${offer.id} ${size.id} hl-${window.HL_STYLE || HEADLINE_STYLE} pat-${window.PATTERN_OVERRIDE || PATTERN} n${products.length}`,
+      `width:${size.w}px;height:${size.h}px;--from:${t.from};--to:${t.to};--accent:${t.accent};--glow:${t.glow || t.to};--text:${t.text}`);
+  }
   if ((window.HERO_OVERRIDE ?? HERO) && offer.bigNum && size.id === "mobile-vertical-hero") {
     const t2 = offer.theme;
     return heroVerticalHTML(offer, size, lang, `${offer.id} ${size.id} pat-${window.PATTERN_OVERRIDE || PATTERN} n${products.length}`,
