@@ -151,7 +151,7 @@ function arcVerticalHTML(offer, size, lang, cls, style) {
     const x = cx + R * Math.sin(rad), y = cy - R * Math.cos(rad);
     const h = base * (1 - 0.32 * Math.abs(a) / maxA) * (p.scale ?? 1);
     return `
-      <div class="arc-item" style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px;height:${h.toFixed(0)}px;transform:translate(-50%,-100%) rotate(${(a * 0.5).toFixed(1)}deg)">
+      <div class="arc-item" style="left:${xc.toFixed(1)}px;top:${y.toFixed(1)}px;height:${h.toFixed(0)}px;transform:translate(-50%,-100%) rotate(${(a * 0.5).toFixed(1)}deg)">
         ${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name?.[lang] ?? "")}">` : ""}
       </div>`;
   }).join("");
@@ -191,7 +191,7 @@ function arcVerticalHTML(offer, size, lang, cls, style) {
 
 // Geometry of the arc stage per banner size (LTR coordinates; mirrored for RTL).
 const ARC_STAGE = {
-  "mobile-vertical-hero": { x: 60, w: 680, top: 720, base: 340, maxA: 30, slot: { y: 770, h: 210, w: 620 } },
+  "mobile-vertical-hero": { x: 30, w: 740, top: 720, base: 340, maxA: 30, slot: { y: 770, h: 210, w: 620 } },
   "desktop-hero": { x: 560, w: 700, top: 206, base: 175, maxA: 16, slot: { y: 210, h: 84, w: 330 } },
   "mobile-hero": { x: 300, w: 400, top: 222, base: 175, maxA: 24, slot: { y: 226, h: 88, w: 260 } },
   "mobile-slim": { x: 330, w: 400, top: 136, base: 118, maxA: 20, slot: { y: 140, h: 56, w: 220 } },
@@ -228,12 +228,26 @@ function arcStageHTML(offer, size, lang) {
   const R = half / Math.sin((g.maxA * Math.PI) / 180);
   const cy = g.top + R;
   const id = `${offer.id}-${size.id}-${lang}`;
-  const items = products.map((p, i) => {
-    const a = n === 1 ? 0 : -g.maxA + (2 * g.maxA * i) / (n - 1);
-    const rad = (a * Math.PI) / 180;
-    const x = cx + R * Math.sin(rad), y = cy - R * Math.cos(rad);
-    const h = g.base * (1 - 0.3 * Math.abs(a) / g.maxA) * (p.scale ?? 1);
+  // Size each product, then lay them side by side along the arc so none overlap
+  // and all stay inside the stage. Shrink everything if they don't fit.
+  const sizes = products.map((p, i) => {
+    const t = n === 1 ? 0 : -1 + (2 * i) / (n - 1);
+    const h = g.base * (1 - 0.3 * Math.abs(t)) * (p.scale ?? 1);
     const w = Math.max(h * 0.7, (g.w * 0.8 / n) * 1.1) * (p.zoom ?? 1);
+    return { p, h, w };
+  });
+  const gap = g.w * 0.02;
+  const avail = g.w * 0.96;
+  let total = sizes.reduce((sum, it) => sum + it.w, 0) + gap * (n - 1);
+  const k2 = Math.min(1, avail / total);
+  sizes.forEach((it) => { it.w *= k2; it.h *= k2; });
+  total = total * k2;
+  let cursor = cx - total / 2;
+  const items = sizes.map(({ p, h, w }) => {
+    const x = cursor + w / 2;
+    cursor += w + gap * k2;
+    const a = (Math.asin(Math.max(-1, Math.min(1, (x - cx) / R))) * 180) / Math.PI;
+    const y = cy - Math.sqrt(Math.max(0, R * R - (x - cx) ** 2));
     return `<div class="arc-item" style="left:${x.toFixed(1)}px;top:${(y + 4).toFixed(1)}px;height:${h.toFixed(0)}px;width:${w.toFixed(0)}px;transform:translate(-50%,-100%) rotate(${(a * 0.5).toFixed(1)}deg)">
         ${p.image ? `<img src="${esc(p.image)}" alt="">` : ""}</div>`;
   }).join("");
