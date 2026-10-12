@@ -491,3 +491,9 @@ img.logo { object-fit: contain; }
   content: ""; position: absolute; z-index: -1; left: 6%; right: 6%; bottom: -4px; height: 3px; border-radius: 3px;
   background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: .8;
 }
+.banner.hero .bn-space { display: block; width: 640px; height: 230px; }
+.banner.hero .bn-img { display: block; width: 640px; height: 260px; object-fit: contain; }
+.banner.hero:has(.bn-space) .bn, .banner.hero:has(.bn-img) .bn { transform: none; }
+.banner.hero .hero-products .product:nth-child(1), .banner.hero .hero-products .product:nth-child(1) .product-media { width: 96px; }
+.banner.hero .hero-products .product:nth-child(3), .banner.hero .hero-products .product:nth-child(3) .product-media { width: 160px; }
+.banner.hero .hero-products .product:nth-child(4), .banner.hero .hero-products .product:nth-child(4) .product-media { width: 260px; }

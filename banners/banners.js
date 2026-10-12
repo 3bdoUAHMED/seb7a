@@ -108,7 +108,9 @@ function bigNumHTML(offer, lang) {
     <div class="bn">
       ${b.pre[lang] ? `<div class="bn-pre">${txt(b.pre[lang])}</div>` : ""}
       <div class="bn-row" dir="ltr">
-        <span class="bn-num" data-t="${esc(b.num)}">${esc(b.num)}</span>
+        ${b.image ? `<img class="bn-img" src="${esc(b.image)}" alt="">`
+          : b.num ? `<span class="bn-num" data-t="${esc(b.num)}">${esc(b.num)}</span>`
+          : `<span class="bn-space"></span>`}
         ${b.post[lang] ? `<span class="bn-post">${esc(b.post[lang])}</span>` : ""}
       </div>
     </div>`;
