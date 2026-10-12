@@ -18,13 +18,31 @@ function keepTogether(name) {
   return name.replace(/Bio-Activ/g, "Bio\u2011Activ").replace(/بيو أكتيف/g, "بيو\u00a0أكتيف");
 }
 
-// BLACK FRIDAY typographic sticker: outlined "BLACK" over a gold "FRIDAY" slab.
-function stickerHTML(lang) {
+// BLACK FRIDAY ribbon sticker: red "BLACK" flag, white "FRIDAY" ribbon,
+// a star and a round badge with the offer's discount.
+function stickerHTML(offer, lang) {
+  const [l1, l2 = ""] = (offer.stickerBadge?.[lang] ?? "").split("|");
+  const badgeFont = lang === "ar" ? "Cairo" : "Anton";
+  const long = Math.max(l1.length, l2.length) > 5;
+  const fs = long ? 17 : 26;
   return `
     <div class="bf-sticker">
-      <span class="bf-black">BLACK</span>
-      <span class="bf-friday">FRIDAY</span>
-      <span class="bf-sale">${lang === "ar" ? "عروض حصرية" : "SALE"}</span>
+      <svg viewBox="0 0 420 330" xmlns="http://www.w3.org/2000/svg">
+        <g transform="rotate(-24 210 170)">
+          <path d="M28 168 l14 26 29 4 -21 20 5 29 -27 -14 -26 14 5 -29 -21 -20 29 -4z" fill="#d42a2a"/>
+          <path d="M100 70 H370 L346 112 L370 154 H100 Z" fill="#d42a2a"/>
+          <text x="220" y="128" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="500" font-size="56" fill="#111">BLACK</text>
+          <path d="M120 146 q 18 -16 36 0 t 36 0 t 36 0 t 36 0 t 36 0 t 36 0" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+          <path d="M80 160 H330 Q340 200 332 240 H86 Q92 220 76 204 Q92 186 80 160 Z" fill="#fff"/>
+          <text x="208" y="222" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="500" font-size="54" fill="#d42a2a">FRIDAY</text>
+        </g>
+        ${l1 ? `
+        <g transform="rotate(-20 352 230)">
+          <circle cx="352" cy="230" r="58" fill="#9b1b1b"/>
+          <text x="352" y="${l2 ? 226 : 240}" text-anchor="middle" font-family="${badgeFont}, sans-serif" font-weight="900" font-size="${fs + 4}" fill="#fff">${esc(l1)}</text>
+          ${l2 ? `<text x="352" y="${226 + fs + 4}" text-anchor="middle" font-family="${badgeFont}, sans-serif" font-weight="900" font-size="${fs}" fill="#fff">${esc(l2)}</text>` : ""}
+        </g>` : ""}
+      </svg>
     </div>`;
 }
 
@@ -77,7 +95,7 @@ function bannerHTML(offer, size, lang) {
     <div class="banner ${offer.id} ${size.id} ${(window.STICKER_OVERRIDE ?? STICKER) ? "has-sticker" : ""} hl-${window.HL_STYLE || HEADLINE_STYLE} pat-${window.PATTERN_OVERRIDE || PATTERN} n${products.length}${products.length >= 5 ? " many" : ""}" dir="${lang === "ar" ? "rtl" : "ltr"}" lang="${lang}"
          data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png"
          style="width:${size.w}px;height:${size.h}px;--from:${t.from};--to:${t.to};--accent:${t.accent};--glow:${t.glow || t.to};--text:${t.text}">
-      ${(window.STICKER_OVERRIDE ?? STICKER) ? stickerHTML(lang) : ""}<div class="deco deco-1"></div><div class="deco deco-2"></div><div class="deco deco-3"></div>
+      ${(window.STICKER_OVERRIDE ?? STICKER) ? stickerHTML(offer, lang) : ""}<div class="deco deco-1"></div><div class="deco deco-2"></div><div class="deco deco-3"></div>
       <div class="copy">
         ${logoHTML(lang)}
         <div class="badge">${txt(offer.badge[lang])}</div>

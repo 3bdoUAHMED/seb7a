@@ -410,26 +410,11 @@ img.logo { object-fit: contain; }
 .pat-blackfriday .product-media { filter: drop-shadow(0 6px 12px rgba(0,0,0,.55)); }
 .pat-blackfriday .product-media::after { background: radial-gradient(closest-side, rgba(0,0,0,.5), transparent); }
 
-/* ---------- BLACK FRIDAY typographic sticker ---------- */
+/* ---------- BLACK FRIDAY ribbon sticker ---------- */
 .has-sticker .badge { visibility: hidden; }
-.bf-sticker {
-  position: absolute; z-index: 3;
-  display: flex; flex-direction: column; align-items: center;
-  font-family: Anton, Impact, sans-serif; line-height: .9; text-transform: uppercase;
-  transform: rotate(-7deg);
-  padding: .14em .22em .16em; border: .03em solid #f2c94c; border-radius: .06em;
-  background: #0a0a0a; box-shadow: .06em .06em 0 #f2c94c, 0 .1em .25em rgba(0,0,0,.6);
-}
-.bf-sticker[dir="rtl"], [dir="rtl"] .bf-sticker { transform: rotate(7deg); }
-.bf-black { color: transparent; -webkit-text-stroke: .025em #fff; letter-spacing: .06em; font-size: 1em; }
-.bf-friday {
-  background: #f2c94c; color: #0a0a0a; font-size: .86em; letter-spacing: .08em;
-  padding: .02em .16em .04em; margin-top: .04em; transform: skewX(-8deg);
-}
-.bf-sale { color: #fff; font-family: Poppins, Cairo, sans-serif; font-weight: 800; font-size: .2em; letter-spacing: .4em; margin-top: .35em; }
-[dir="rtl"] .bf-sale { font-family: Cairo, sans-serif; letter-spacing: 0; font-size: .24em; }
-
-.mobile-vertical-hero .bf-sticker { font-size: 52px; top: 34px; inset-inline-start: 30px; }
-.desktop-hero .bf-sticker { font-size: 40px; top: 50px; inset-inline-start: 560px; }
-.mobile-hero .bf-sticker { font-size: 28px; top: 14px; inset-inline-start: 250px; }
-.mobile-slim .bf-sticker { font-size: 24px; top: 30px; inset-inline-start: 320px; }
+.bf-sticker { position: absolute; z-index: 3; aspect-ratio: 420 / 330; filter: drop-shadow(0 6px 10px rgba(0,0,0,.45)); }
+.bf-sticker svg { display: block; width: 100%; height: 100%; }
+.mobile-vertical-hero .bf-sticker { width: 230px; top: 6px; inset-inline-start: 8px; }
+.desktop-hero .bf-sticker { width: 190px; top: 40px; inset-inline-start: 520px; }
+.mobile-hero .bf-sticker { width: 130px; top: 4px; inset-inline-start: 240px; }
+.mobile-slim .bf-sticker { width: 110px; top: 40px; inset-inline-start: 300px; }

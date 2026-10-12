@@ -36,6 +36,7 @@ const OFFERS = [
   {
     id: "offer-1",
     theme: { from: "#0a0a0a", to: "#1a1a1a", accent: "#f2c94c", glow: "#d63447", text: "#ffffff" },
+    stickerBadge: { en: "40%|OFF", ar: "خصم|40%" }, // round badge on the BLACK FRIDAY sticker ("|" = new line)
     badge: { en: "BLACK FRIDAY", ar: "بلاك فرايداي" },
     headline: { en: "Up to 40% OFF", ar: "خصم يصل إلى 40%" },
     sub: { en: "On Bioxcin hair care favourites", ar: "على منتجات بيوكسين للعناية بالشعر" },
@@ -51,6 +52,7 @@ const OFFERS = [
   {
     id: "offer-2",
     theme: { from: "#0a0a0a", to: "#1a1a1a", accent: "#f2c94c", glow: "#b23a55", text: "#ffffff" },
+    stickerBadge: { en: "BUY 2|GET 2", ar: "اشترِ 2|واحصل على 2" }, // round badge on the BLACK FRIDAY sticker ("|" = new line)
     badge: { en: "BLACK FRIDAY", ar: "بلاك فرايداي" },
     headline: { en: "Buy 2 Get 2", ar: "اشترِ 2 واحصل على 2" },
     sub: { en: "On Bioxcin hair care favourites", ar: "على منتجات بيوكسين للعناية بالشعر" },
@@ -73,6 +75,7 @@ const OFFERS = [
   {
     id: "offer-3",
     theme: { from: "#0a0a0a", to: "#1a1a1a", accent: "#f2c94c", glow: "#2f5fd0", text: "#ffffff" },
+    stickerBadge: { en: "50%|OFF", ar: "خصم|50%" }, // round badge on the BLACK FRIDAY sticker ("|" = new line)
     badge: { en: "BLACK FRIDAY", ar: "بلاك فرايداي" },
     headline: { en: "Buy 1 Get 50% OFF", ar: "اشترِ 1 واحصل على خصم 50%" },
     sub: { en: "", ar: "" },
