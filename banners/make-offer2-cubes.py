@@ -69,14 +69,14 @@ def draw_cube(out, cx, w, h, by, rtl):
     return out, (cx + dx / 2, yt - dy * 0.55)
 
 def put_product(out, k, cx, by, h, rtl):
-    sgn = 1 if not rtl else -1
     w = P[k].width * h / P[k].height
-    e = Image.new("RGBA", (int(w * 1.2), max(4, int(w * 0.16))), (0, 0, 0, 0))
-    ImageDraw.Draw(e).ellipse((0, 0, e.width, e.height), fill=(60, 70, 80, 70))
-    e = e.filter(ImageFilter.GaussianBlur(max(1.5, w * 0.04)))
-    out.paste(e, (int(cx - e.width / 2 + w * 0.12 * sgn), int(by - e.height * 0.5)), e)
+    # tight contact shadow right under the product (no wide blurred smudge)
+    e = Image.new("RGBA", (max(4, int(w * 0.92)), max(3, int(h * 0.03))), (0, 0, 0, 0))
+    ImageDraw.Draw(e).ellipse((0, 0, e.width - 1, e.height - 1), fill=(70, 80, 95, 85))
+    e = e.filter(ImageFilter.GaussianBlur(1.2))
+    out.paste(e, (int(cx - e.width / 2), int(by - e.height * 0.6)), e)
     rim = P[k].resize((int(w), int(h)), Image.LANCZOS)
-    alpha = rim.getchannel("A").point(lambda v: 0 if v < 24 else v)
+    alpha = rim.getchannel("A").point(lambda v: 0 if v < 40 else v)
     out.paste(rim.convert("RGB"), (int(cx - w / 2), int(by - h)), alpha)
     return out
 
@@ -215,15 +215,15 @@ def build2(W, H, x0, x1, rtl, u, back, front, place):
     return out
 
 LAYOUT2 = {  # W, H, x0, x1, u, back, front, place
-    "1440x300": (1440, 300, 620, 1410, 150, (0.0, 0.60, 200, 300), (0.50, 1.0, 250, 300), [("forte", "B", 0.07), ("garlic", "B", 0.2), ("thermal", "B", 0.32), ("qshamp", "B", 0.445),
-                  ("serum", "F", 0.58), ("box", "F", 0.72), ("pen", "F", 0.855), ("ds", "F", 0.95)]),
-    "706x320": (706, 320, 290, 700, 118, (0.0, 0.60, 214, 320), (0.50, 1.0, 266, 320), [("forte", "B", 0.07), ("garlic", "B", 0.2), ("thermal", "B", 0.32), ("qshamp", "B", 0.445),
-                  ("serum", "F", 0.58), ("box", "F", 0.72), ("pen", "F", 0.855), ("ds", "F", 0.95)]),
-    "800x200": (800, 200, 370, 796, 82, (0.0, 0.60, 136, 200), (0.50, 1.0, 168, 200), [("forte", "B", 0.07), ("garlic", "B", 0.2), ("thermal", "B", 0.32), ("qshamp", "B", 0.445),
-                  ("serum", "F", 0.58), ("box", "F", 0.72), ("pen", "F", 0.855), ("ds", "F", 0.95)]),
-    "800x1200": (800, 1200, 40, 760, 225, (0.0, 0.62, 860, 1200), (0.38, 1.0, 1070, 1200),
-                 [("forte", "B", 0.08), ("garlic", "B", 0.25), ("thermal", "B", 0.4), ("qshamp", "B", 0.555),
-                  ("serum", "F", 0.48), ("box", "F", 0.665), ("pen", "F", 0.83), ("ds", "F", 0.935)]),
+    "1440x300": (1440, 300, 620, 1410, 150, (0.0, 0.60, 200, 300), (0.50, 1.0, 250, 300), [("forte", "B", 0.07), ("garlic", "B", 0.2), ("qshamp", "B", 0.33), ("thermal", "B", 0.445), ("ds", "B", 0.535),
+                  ("serum", "F", 0.67), ("box", "F", 0.81), ("pen", "F", 0.945)]),
+    "706x320": (706, 320, 290, 700, 118, (0.0, 0.60, 214, 320), (0.50, 1.0, 266, 320), [("forte", "B", 0.07), ("garlic", "B", 0.2), ("qshamp", "B", 0.33), ("thermal", "B", 0.445), ("ds", "B", 0.535),
+                  ("serum", "F", 0.67), ("box", "F", 0.81), ("pen", "F", 0.945)]),
+    "800x200": (800, 200, 370, 796, 82, (0.0, 0.60, 136, 200), (0.50, 1.0, 168, 200), [("forte", "B", 0.07), ("garlic", "B", 0.2), ("qshamp", "B", 0.33), ("thermal", "B", 0.445), ("ds", "B", 0.535),
+                  ("serum", "F", 0.67), ("box", "F", 0.81), ("pen", "F", 0.945)]),
+    "800x1200": (800, 1200, 40, 760, 190, (0.0, 0.75, 860, 1200), (0.40, 1.0, 1070, 1200),
+                 [("forte", "B", 0.09), ("garlic", "B", 0.26), ("qshamp", "B", 0.43), ("thermal", "B", 0.565), ("ds", "B", 0.665),
+                  ("serum", "F", 0.53), ("box", "F", 0.73), ("pen", "F", 0.91)]),
 }
 if __name__ == "__main__":
     for name, (W, H, x0, x1, u, back, front, place) in LAYOUT2.items():
