@@ -866,3 +866,13 @@ img.logo { object-fit: contain; }
 .podium.mobile-vertical-hero .pd3-type.v .pd-type.ar { font-size: 104px; margin: 20px 0 0; }
 .podium.mobile-vertical-hero .pd3-type.v .bf-sticker { position: absolute; width: 170px; top: -40px; left: auto; right: -40px; }
 [dir="rtl"].podium.mobile-vertical-hero .pd3-type.v .bf-sticker { right: auto; left: -40px; }
+/* typography removed: sticker sits alone near the logo */
+.banner.podium.pd3 .pd3-type, .podium.mobile-vertical-hero .pd3-type.v { width: 0; height: 0; }
+.banner.podium.pd3 .bf-sticker { position: absolute; top: auto; }
+.banner.podium.pd3.desktop-hero .pd3-text { justify-content: flex-start; align-items: flex-start; }
+.banner.podium.pd3 .pd3-text { justify-content: flex-start; align-items: flex-start; padding: 0; }
+.banner.podium.pd3.desktop-hero .bf-sticker { top: 90px; inset-inline-start: 40px; inset-inline-end: auto; width: 150px; }
+.banner.podium.pd3.mobile-hero .bf-sticker { top: 70px; inset-inline-start: 18px; inset-inline-end: auto; width: 110px; }
+.banner.podium.pd3.mobile-slim .bf-sticker { top: 60px; inset-inline-start: 16px; inset-inline-end: auto; width: 90px; }
+.podium.mobile-vertical-hero .pd3-type.v .bf-sticker { top: 30px; right: auto; left: 0; width: 200px; transform: translateX(-50%); }
+[dir="rtl"].podium.mobile-vertical-hero .pd3-type.v .bf-sticker { left: 0; }
