@@ -385,18 +385,32 @@ function b2g2Lockup(lang) {
 function podiumBannerHTML(offer, size, lang, style) {
   const rtl = lang === "ar";
   const vertical = size.id === "mobile-vertical-hero";
-  const bg = vertical ? "products/offer2-podium.jpg" : `products/offer2-bg-${size.w}x${size.h}.jpg`;
-  return `
+  const cta = `<span class="st-cta">${txt(offer.cta[lang])}
+          <svg viewBox="0 0 24 24"><path d="${rtl ? "M15 6l-6 6 6 6" : "M9 6l6 6-6 6"}" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>`;
+  const sticker = stickerHTML({ ...offer, stickerBadge: null }, lang);
+  if (vertical) {
+    return `
     <div class="banner podium ${offer.id} ${size.id}" dir="${rtl ? "rtl" : "ltr"}" lang="${lang}"
          data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png"
-         style="${style};background:url('${bg}') 0 0/100% 100%">
+         style="${style};background:url('products/offer2-podium.jpg') 0 0/100% 100%">
       <img class="pd-logo" src="products/bioxcin-logo-red.png" alt="BIOXCIN">
-      ${stickerHTML({ ...offer, stickerBadge: null }, lang)}
-      <div class="pd-copy">
-        ${b2g2Lockup(lang)}
-        <span class="st-cta">${txt(offer.cta[lang])}
-          <svg viewBox="0 0 24 24"><path d="${rtl ? "M15 6l-6 6 6 6" : "M9 6l6 6-6 6"}" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
+      ${sticker}
+      <div class="pd-copy">${b2g2Lockup(lang)}${cta}</div>
+    </div>`;
+  }
+  // wide: logo | divider | lockup + button in one column; products on the other side (baked into the bg)
+  return `
+    <div class="banner podium pd2 ${offer.id} ${size.id}" dir="${rtl ? "rtl" : "ltr"}" lang="${lang}"
+         data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png"
+         style="${style};background:url('products/offer2-bg-${size.w}x${size.h}-${lang}.jpg') 0 0/100% 100%">
+      <div class="pd2-side">
+        <img class="pd2-logo" src="products/bioxcin-logo-red.png" alt="BIOXCIN">
+        <i class="pd2-rule"></i>
+        <div class="pd2-col">
+          <div class="pd2-type">${b2g2Lockup(lang)}${sticker}</div>
+          ${cta}
+        </div>
       </div>
     </div>`;
 }

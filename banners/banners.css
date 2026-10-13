@@ -805,3 +805,47 @@ img.logo { object-fit: contain; }
 .podium.mobile-slim .bf-sticker { width: 88px; left: 330px; top: 2px; }
 .podium.mobile-slim .pd-logo { right: auto; left: 700px; display: none; }
 .podium.mobile-hero .bf-sticker { left: 318px; }
+
+/* ---------- offer 2 wide (pd2): one aligned text block ---------- */
+.banner.podium.pd2 .pd2-side { position: absolute; z-index: 3; top: 0; bottom: 0; inset-inline-start: 0;
+  display: flex; align-items: center; }
+.banner.podium.pd2 .pd2-logo { display: block; height: auto; }
+.banner.podium.pd2 .pd2-rule { display: block; width: 1.5px; background: rgba(139,37,51,.35); align-self: center; }
+.banner.podium.pd2 .pd2-col { display: flex; flex-direction: column; align-items: center; }
+.banner.podium.pd2 .pd2-type { position: relative; }
+.banner.podium.pd2 .pd2-type img.pd-type { display: block; width: 100%; }
+.banner.podium.pd2 .pd-type.ar { margin: 0; }
+.banner.podium.pd2 .bf-sticker { position: absolute; top: auto; left: auto; right: auto; }
+.banner.podium.pd2 .st-cta { margin: 0; position: static; }
+
+/* 1440 x 300 */
+.banner.podium.pd2.desktop-hero .pd2-side { padding-inline-start: 70px; gap: 46px; }
+.banner.podium.pd2.desktop-hero .pd2-logo { width: 190px; }
+.banner.podium.pd2.desktop-hero .pd2-rule { height: 150px; }
+.banner.podium.pd2.desktop-hero .pd2-col { gap: 14px; }
+.banner.podium.pd2.desktop-hero .pd2-type { width: 300px; }
+.banner.podium.pd2.desktop-hero .pd-type.ar { font-size: 50px; width: 330px; }
+.banner.podium.pd2.desktop-hero .st-cta { font-size: 17px; padding: 11px 30px; }
+.banner.podium.pd2.desktop-hero .bf-sticker { width: 112px; top: -24px; inset-inline-end: -96px; }
+
+/* 706 x 320 */
+.banner.podium.pd2.mobile-hero .pd2-side { padding-inline-start: 26px; flex-direction: column; justify-content: center; align-items: center; gap: 12px; width: 300px; }
+.banner.podium.pd2.mobile-hero .pd2-logo { width: 120px; }
+.banner.podium.pd2.mobile-hero .pd2-rule { display: none; }
+.banner.podium.pd2.mobile-hero .pd2-col { gap: 12px; }
+.banner.podium.pd2.mobile-hero .pd2-type { width: 250px; }
+.banner.podium.pd2.mobile-hero .pd-type.ar { font-size: 42px; width: 270px; }
+.banner.podium.pd2.mobile-hero .st-cta { font-size: 14px; padding: 9px 24px; }
+.banner.podium.pd2.mobile-hero .bf-sticker { width: 84px; top: -30px; inset-inline-end: -30px; }
+
+/* 800 x 200 */
+.banner.podium.pd2.mobile-slim .pd2-side { padding-inline-start: 22px; gap: 18px; }
+.banner.podium.pd2.mobile-slim .pd2-logo { width: 104px; }
+.banner.podium.pd2.mobile-slim .pd2-rule { height: 110px; }
+.banner.podium.pd2.mobile-slim .pd2-col { gap: 8px; }
+.banner.podium.pd2.mobile-slim .pd2-type { width: 180px; }
+.banner.podium.pd2.mobile-slim .pd-type.ar { font-size: 30px; width: 200px; }
+.banner.podium.pd2.mobile-slim .st-cta { font-size: 12px; padding: 7px 18px; }
+.banner.podium.pd2.mobile-slim .bf-sticker { width: 70px; top: -10px; inset-inline-end: -64px; }
+.banner.podium.pd2.mobile-hero .bf-sticker { top: -52px; inset-inline-end: -44px; }
+[dir="rtl"].banner.podium.pd2.desktop-hero .bf-sticker { top: -44px; inset-inline-end: -70px; }
