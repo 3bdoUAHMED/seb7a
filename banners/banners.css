@@ -861,3 +861,8 @@ img.logo { object-fit: contain; }
 .banner.podium.pd3.desktop-hero { --lt: 24px; --ls: 40px; --lw: 150px; --tw: 690px; --yw: 340px; --af: 54px; --tp: 20px; --st: -30px; --se: -110px; --sw: 120px; }
 .banner.podium.pd3.mobile-hero  { --lt: 18px; --ls: 20px; --lw: 120px; --tw: 318px; --yw: 262px; --af: 42px; --tp: 46px; --st: -54px; --se: -38px; --sw: 86px; }
 .banner.podium.pd3.mobile-slim  { --lt: 12px; --ls: 16px; --lw: 92px;  --tw: 400px; --yw: 200px; --af: 32px; --tp: 14px; --st: -18px; --se: -82px; --sw: 76px; }
+.podium.mobile-vertical-hero .pd3-type.v { position: relative; width: 560px; margin-top: 30px; }
+.podium.mobile-vertical-hero .pd3-type.v img.pd-type { width: 100%; }
+.podium.mobile-vertical-hero .pd3-type.v .pd-type.ar { font-size: 104px; margin: 20px 0 0; }
+.podium.mobile-vertical-hero .pd3-type.v .bf-sticker { position: absolute; width: 170px; top: -40px; left: auto; right: -40px; }
+[dir="rtl"].podium.mobile-vertical-hero .pd3-type.v .bf-sticker { right: auto; left: -40px; }

@@ -393,10 +393,9 @@ function podiumBannerHTML(offer, size, lang, style) {
     return `
     <div class="banner podium ${offer.id} ${size.id}" dir="${rtl ? "rtl" : "ltr"}" lang="${lang}"
          data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png"
-         style="${style};background:url('products/offer2-podium.jpg') 0 0/100% 100%">
+         style="${style};background:url('products/offer2-bg-800x1200-${lang}.jpg') 0 0/100% 100%">
       <img class="pd-logo" src="products/bioxcin-logo-red.png" alt="BIOXCIN">
-      ${sticker}
-      <div class="pd-copy">${b2g2Lockup(lang)}${cta}</div>
+      <div class="pd-copy"><div class="pd3-type v">${b2g2Lockup(lang)}${sticker}</div></div>
     </div>`;
   }
   // wide: logo in the top corner, lockup (+ sticker on its corner) centred on the text side, no button
