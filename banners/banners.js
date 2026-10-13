@@ -399,19 +399,13 @@ function podiumBannerHTML(offer, size, lang, style) {
       <div class="pd-copy">${b2g2Lockup(lang)}${cta}</div>
     </div>`;
   }
-  // wide: logo | divider | lockup + button in one column; products on the other side (baked into the bg)
+  // wide: logo in the top corner, lockup (+ sticker on its corner) centred on the text side, no button
   return `
-    <div class="banner podium pd2 ${offer.id} ${size.id}" dir="${rtl ? "rtl" : "ltr"}" lang="${lang}"
+    <div class="banner podium pd3 ${offer.id} ${size.id}" dir="${rtl ? "rtl" : "ltr"}" lang="${lang}"
          data-file="${offer.id}/${size.device}-${lang}-${size.w}x${size.h}.png"
          style="${style};background:url('products/offer2-bg-${size.w}x${size.h}-${lang}.jpg') 0 0/100% 100%">
-      <div class="pd2-side">
-        <img class="pd2-logo" src="products/bioxcin-logo-red.png" alt="BIOXCIN">
-        <i class="pd2-rule"></i>
-        <div class="pd2-col">
-          <div class="pd2-type">${b2g2Lockup(lang)}${sticker}</div>
-          ${cta}
-        </div>
-      </div>
+      <img class="pd3-logo" src="products/bioxcin-logo-red.png" alt="BIOXCIN">
+      <div class="pd3-text"><div class="pd3-type">${b2g2Lockup(lang)}${sticker}</div></div>
     </div>`;
 }
 

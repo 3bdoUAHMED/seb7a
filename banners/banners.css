@@ -849,3 +849,15 @@ img.logo { object-fit: contain; }
 .banner.podium.pd2.mobile-slim .bf-sticker { width: 70px; top: -10px; inset-inline-end: -64px; }
 .banner.podium.pd2.mobile-hero .bf-sticker { top: -52px; inset-inline-end: -44px; }
 [dir="rtl"].banner.podium.pd2.desktop-hero .bf-sticker { top: -44px; inset-inline-end: -70px; }
+
+/* ---------- offer 2 wide (pd3): logo top corner, centred lockup, no CTA ---------- */
+.banner.podium.pd3 .pd3-logo { position: absolute; z-index: 3; top: var(--lt); inset-inline-start: var(--ls); width: var(--lw); }
+.banner.podium.pd3 .pd3-text { position: absolute; z-index: 3; top: 0; bottom: 0; inset-inline-start: 0; width: var(--tw);
+  display: flex; align-items: center; justify-content: center; padding-top: var(--tp, 0); }
+.banner.podium.pd3 .pd3-type { position: relative; width: var(--yw); }
+.banner.podium.pd3 .pd3-type img.pd-type { display: block; width: 100%; }
+.banner.podium.pd3 .pd-type.ar { margin: 0; font-size: var(--af); }
+.banner.podium.pd3 .bf-sticker { position: absolute; left: auto; right: auto; top: var(--st); inset-inline-end: var(--se); width: var(--sw); }
+.banner.podium.pd3.desktop-hero { --lt: 24px; --ls: 40px; --lw: 150px; --tw: 690px; --yw: 340px; --af: 54px; --tp: 20px; --st: -30px; --se: -110px; --sw: 120px; }
+.banner.podium.pd3.mobile-hero  { --lt: 18px; --ls: 20px; --lw: 120px; --tw: 318px; --yw: 262px; --af: 42px; --tp: 46px; --st: -54px; --se: -38px; --sw: 86px; }
+.banner.podium.pd3.mobile-slim  { --lt: 12px; --ls: 16px; --lw: 92px;  --tw: 400px; --yw: 200px; --af: 32px; --tp: 14px; --st: -18px; --se: -82px; --sw: 76px; }
