@@ -798,3 +798,10 @@ img.logo { object-fit: contain; }
 .podium.mobile-slim .st-cta { margin-top: 120px; margin-inline-start: 18px; }
 [dir="rtl"].podium.mobile-slim .st-cta { margin-inline-start: 0; margin-inline-end: 18px; }
 [dir="rtl"].podium.desktop-hero .bf-sticker { top: 120px; }
+/* offer 2 wide: products fill the right side, so logo + sticker live on the copy side */
+[dir="rtl"].podium.desktop-hero .pd-logo { right: auto; left: 60px; }
+.podium.desktop-hero .bf-sticker, [dir="rtl"].podium.desktop-hero .bf-sticker { width: 140px; left: 50px; top: 120px; }
+.podium.mobile-hero .bf-sticker { width: 92px; left: 300px; top: 2px; }
+.podium.mobile-slim .bf-sticker { width: 88px; left: 330px; top: 2px; }
+.podium.mobile-slim .pd-logo { right: auto; left: 700px; display: none; }
+.podium.mobile-hero .bf-sticker { left: 318px; }
