@@ -1,0 +1,45 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&family=Rubik:wght@900&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:transparent}
+.s{position:relative;width:1400px;height:1000px;display:flex;align-items:center;justify-content:center}
+.navy{color:#003366}.red{color:#e5162b}
+.r{font-family:Rubik,sans-serif;font-weight:900}
+.c{font-family:Cairo,sans-serif;font-weight:900}
+.rib{display:inline-block;background:linear-gradient(180deg,#ff3b3b,#d40f1f);color:#fff;font-family:Cairo,sans-serif;font-weight:900;
+  line-height:1;clip-path:polygon(0 0,100% 0,94% 50%,100% 100%,0 100%,6% 50%);box-shadow:0 6px 0 #8a0712}
+/* V1: centred stack, numbers emphasised inline */
+#v1 .w{transform:rotate(-7deg);display:flex;flex-direction:column;align-items:center;line-height:.9}
+#v1 .k{font-size:56px;letter-spacing:6px;margin-bottom:14px}
+#v1 .a{font-size:150px}#v1 .a .r{font-size:190px;color:#e5162b}
+#v1 .b{font-size:150px;margin-top:-10px}#v1 .b .r{font-size:190px;color:#e5162b}
+#v1 .rib{font-size:84px;padding:4px 70px 18px;margin-top:20px}
+/* V2: giant 2+2 hero */
+#v2 .w{transform:rotate(-7deg);display:flex;flex-direction:column;align-items:center;line-height:.85}
+#v2 .top{font-size:72px;display:flex;gap:220px}
+#v2 .big{font-size:400px;letter-spacing:-10px}
+#v2 .big .p{color:#e5162b;font-size:300px;margin:0 10px}
+#v2 .rib{font-size:90px;padding:4px 80px 20px;margin-top:-30px}
+/* V3: two lines right-aligned, big numbers in navy discs */
+#v3 .w{transform:rotate(-6deg);display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+#v3 .k{font-size:54px;letter-spacing:5px;margin-inline-start:10px}
+#v3 .ln{display:flex;align-items:center;gap:26px;font-size:140px;line-height:1}
+#v3 .d{display:inline-flex;align-items:center;justify-content:center;width:190px;height:190px;border-radius:50%;background:#003366;color:#fff;font-size:150px}
+#v3 .d.red{background:#e5162b}
+#v3 .rib{font-size:80px;padding:4px 70px 18px;margin-inline-start:120px;margin-top:10px}
+</style></head><body>
+<div class="s" id="v1"><div class="w">
+  <div class="k c red">عرض خاص</div>
+  <div class="a c navy">اشترِ <span class="r navy">2</span></div>
+  <div class="b c navy">واحصل على <span class="r">2</span></div>
+  <span class="rib">مجاناً</span></div></div>
+<div class="s" id="v2"><div class="w">
+  <div class="top c navy"><span>اشترِ</span><span>واحصل على</span></div>
+  <div class="big r navy" dir="ltr">2<span class="p">+</span>2</div>
+  <span class="rib">مجاناً</span></div></div>
+<div class="s" id="v3"><div class="w">
+  <div class="k c red">عرض خاص</div>
+  <div class="ln c navy">اشترِ <span class="d r">2</span></div>
+  <div class="ln c navy">واحصل على <span class="d r red">2</span></div>
+  <span class="rib">مجاناً</span></div></div>
+</body></html>
