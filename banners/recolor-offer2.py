@@ -6,12 +6,12 @@ import numpy as np, cv2
 from PIL import Image
 I = sys.argv[1]
 JOBS = {  # src: (name, text box (only bluish pixels inside it change), boxes protected from the ribbon recolour)
-    50: ("mobile-ar-800x1200", (250, 40, 625, 400), [(30, 360, 215, 565), (60, 415, 780, 1060), (230, 30, 570, 60)]),
+    50: ("mobile-ar-800x1200", (200, 40, 625, 400), [(30, 360, 215, 565), (60, 415, 780, 1060), (230, 30, 570, 60)]),
     51: ("desktop-ar-1440x300", (900, 30, 1235, 292), [(1235, 20, 1415, 100), (1240, 90, 1405, 235), (40, 30, 835, 255)]),
     52: ("mobile-ar-706x320", (440, 135, 640, 318), [(555, 12, 700, 58), (585, 55, 700, 132), (0, 40, 425, 320)]),
     53: ("mobile-ar-800x200", (440, 42, 712, 198), [(680, 5, 800, 52), (705, 52, 800, 150), (0, 25, 455, 200)]),
 }
-GOLD = np.array([245, 190, 20], np.float32)
+GOLD = np.array([128, 22, 42], np.float32)   # burgundy text (matches the logo)
 os.makedirs("output/offer-2-final", exist_ok=True)
 for n, (name, (tx0, ty0, tx1, ty1), prot) in JOBS.items():
     im = np.asarray(Image.open(f"{I}/{n}.jpg").convert("RGB")).astype(np.float32)
@@ -27,12 +27,21 @@ for n, (name, (tx0, ty0, tx1, ty1), prot) in JOBS.items():
     # remove the navy contribution and put gold in its place; background stays untouched
     base = reg + cov[..., None] * (GOLD - navy)
     shadow = np.roll(np.roll(cov, 3, 0), 2, 1); shadow = cv2.GaussianBlur(shadow, (0, 0), 1.5) * (1 - cov)
-    base = base * (1 - 0.32 * shadow[..., None])
+    base = base * (1 - 0.12 * shadow[..., None])
     out[ty0:ty1, tx0:tx1] = base
+    # --- the red "2" digits inside the text box -> same burgundy (large red blobs only; small ones are confetti)
+    th = cv2.cvtColor(out[ty0:ty1, tx0:tx1].clip(0, 255).astype(np.uint8), cv2.COLOR_RGB2HSV).astype(int)
+    rr = (((th[..., 0] < 10) | (th[..., 0] > 170)) & (th[..., 1] > 90) & (th[..., 2] > 70)).astype(np.uint8)
+    DIGITS = {51: [(1015, 55, 1070, 125), (925, 185, 980, 250)], 52: [(510, 165, 550, 210), (450, 255, 490, 300)],
+              53: [(535, 45, 580, 90), (475, 140, 515, 185)], 50: [(350, 100, 425, 185), (220, 300, 285, 375)]}
+    digit = np.zeros(rr.shape, bool)
+    for x0, y0, x1, y1 in DIGITS[n]: digit[max(0, y0 - ty0):y1 - ty0, max(0, x0 - tx0):x1 - tx0] = True
+    # digits keep their original red (accent next to the burgundy words)
+    digit_full = np.zeros(out.shape[:2], bool); digit_full[ty0:ty1, tx0:tx1] = digit
     # --- red ribbons -> yellow (outside protected areas)
     hsvf = cv2.cvtColor(out.clip(0, 255).astype(np.uint8), cv2.COLOR_RGB2HSV)
     h, s, v = [hsvf[..., i].astype(int) for i in range(3)]
-    allow = np.ones(h.shape, bool)
+    allow = ~digit_full
     for x0, y0, x1, y1 in prot: allow[y0:y1, x0:x1] = False
     red = (h < 10) | (h > 170)
     seed = (allow & red & (s > 140) & (v > 140)).astype(np.uint8)
