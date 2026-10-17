@@ -12,6 +12,14 @@ JOBS = {  # source -> (output name, allowed areas (x0,y0,x1,y1), sticker (x,y,wi
     37: ("mobile-en-800x1200", [(150, 745, 655, 1005), (685, 285, 745, 340), (75, 900, 170, 955),
                                 (605, 955, 695, 1015), (15, 1105, 100, 1165), (675, 1090, 735, 1160)], None),
 }
+JOBS_EN = {
+    38: ("desktop-en-1440x300", [(1245, 110, 1425, 275), (530, 30, 580, 68), (1240, 245, 1295, 280)], None),
+    39: ("mobile-en-706x320", [(420, 235, 605, 320), (290, 8, 340, 40), (650, 258, 695, 292)], (556, 8, 140)),
+    40: ("mobile-en-800x200", [(660, 0, 800, 100), (710, 155, 755, 185)], (250, 4, 90)),
+    41: ("mobile-en-800x1200", [(150, 745, 655, 1005), (685, 285, 745, 340), (75, 900, 170, 955),
+                                (605, 955, 695, 1015), (15, 1105, 100, 1165), (675, 1090, 735, 1160)], None),
+}
+if len(sys.argv) > 3 and sys.argv[3] == "en": JOBS = JOBS_EN
 stk = Image.open(STK); stk = stk.crop(stk.getchannel("A").getbbox())
 os.makedirs("output/offer-1-final", exist_ok=True)
 for n, (name, areas, place) in JOBS.items():
