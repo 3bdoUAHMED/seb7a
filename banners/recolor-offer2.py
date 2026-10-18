@@ -49,7 +49,7 @@ for n, (name, (tx0, ty0, tx1, ty1), prot) in JOBS.items():
               53: [(535, 45, 580, 90), (475, 140, 515, 185)], 50: [(350, 100, 425, 185), (220, 300, 285, 375)],
               # EN: "SPECIAL OFFER" + FREE ribbon
               60: [(235, 110, 520, 192), (475, 215, 605, 292)], 61: [(205, 125, 380, 170), (355, 188, 434, 234)],
-              62: [(60, 150, 215, 182), (180, 195, 247, 234)], 63: [(140, 55, 280, 93), (255, 105, 320, 142)]}
+              62: [(60, 150, 200, 182), (180, 195, 247, 234)], 63: [(140, 55, 280, 93), (255, 105, 320, 142)]}
     digit = np.zeros(rr.shape, bool)
     for x0, y0, x1, y1 in DIGITS[n]: digit[max(0, y0 - ty0):y1 - ty0, max(0, x0 - tx0):x1 - tx0] = True
     # digits keep their original red (accent next to the burgundy words)
@@ -59,7 +59,8 @@ for n, (name, (tx0, ty0, tx1, ty1), prot) in JOBS.items():
     h, s, v = [hsvf[..., i].astype(int) for i in range(3)]
     allow = ~digit_full
     textfull = np.zeros(out.shape[:2], bool); textfull[ty0:ty1, tx0:tx1] = cov > 0.25
-    allow &= ~cv2.dilate(textfull.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)  # recoloured words stay burgundy
+    textdil = cv2.dilate(textfull.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
+    allow &= ~(textdil & (out[..., 0] < 180))   # recoloured words stay burgundy; a bright red ribbon tip touching them still changes
     for x0, y0, x1, y1 in prot: allow[y0:y1, x0:x1] = False
     # whole ribbons at once (incl. their pink highlights), so none ends up half red / half yellow
     redh = (h < 12) | (h > 165)
