@@ -51,3 +51,34 @@ for n, (name, (tx0, ty0, tx1, ty1), prot) in JOBS.items():
     hsvf[..., 1][keep] = np.clip(np.maximum(s[keep], 170) * 0.95, 0, 255)
     hsvf[..., 2][keep] = np.clip(v[keep] * 1.1 + 10, 0, 255)
     Image.fromarray(cv2.cvtColor(hsvf, cv2.COLOR_HSV2RGB)).save(f"output/offer-2-final/{name}.png")
+
+# --- vertical banner: the red "Yellow Novmber" sticker -> yellow ribbon/star with dark lettering
+def sticker_to_yellow(path, box):
+    im = np.asarray(Image.open(path).convert("RGB")).copy()
+    x0, y0, x1, y1 = box
+    reg = im[y0:y1, x0:x1]
+    hsv = cv2.cvtColor(reg, cv2.COLOR_RGB2HSV).astype(int)
+    red = (((hsv[..., 0] < 10) | (hsv[..., 0] > 170)) & (hsv[..., 1] > 90) & (hsv[..., 2] > 80)).astype(np.uint8)
+    nl, lab, st, _ = cv2.connectedComponentsWithStats(red, 8)
+    big = np.zeros(red.shape, np.uint8); small = np.zeros(red.shape, bool)
+    for i in range(1, nl):
+        if st[i, cv2.CC_STAT_AREA] > 400: big[lab == i] = 1
+        elif st[i, cv2.CC_STAT_AREA] > 4: small |= lab == i
+    # white letters inside the red ribbon = holes in the ribbon mask
+    filled = big.copy(); cnts, _ = cv2.findContours(big, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(filled, cnts, -1, 1, -1)
+    holes = (filled > 0) & (big == 0)
+    yellow = np.array([245, 196, 30.]); ink = np.array([25, 25, 25.])
+    shade = (reg.astype(np.float32).max(2) / 255.0)[..., None]
+    out = reg.astype(np.float32)
+    out[big > 0] = (yellow * np.clip(shade * 1.15, 0.75, 1.05))[big > 0]
+    out[holes] = ink
+    out[small] = ink
+    # anti-aliased red fringes left on the letters -> blend toward ink
+    fr = ((hsv[..., 0] < 12) | (hsv[..., 0] > 165)) & (hsv[..., 1] > 35) & (big == 0) & ~holes & ~small
+    a = np.clip((hsv[..., 1] - 35) / 120.0, 0, 1)[..., None]
+    out[fr] = (out * (1 - a) + ink * a)[fr]
+    im[y0:y1, x0:x1] = out.clip(0, 255).astype(np.uint8)
+    Image.fromarray(im).save(path)
+
+sticker_to_yellow("output/offer-2-final/mobile-ar-800x1200.png", (25, 360, 220, 570))
