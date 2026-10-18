@@ -36,7 +36,9 @@ def to_yellow(im, areas):
     def near(mask, r):
         return cv2.dilate(mask.astype(np.uint8), np.ones((2 * r + 1, 2 * r + 1), np.uint8)).astype(bool)
     # 1) the lit faces of the 3D number / squiggles: bright and strongly red
-    face = allow & redh & nb & (((s > 140) & (v > 150)) | ((s > 15) & (v > 175)))
+    gr = G / np.maximum(R, 1)
+    pinkish = o[..., 2] > G - 12      # pink highlights have B ~ G; the gold floor arc has B well below G
+    face = allow & redh & nb & (((s > 140) & (v > 150) & (gr < 0.3)) | ((s > 15) & (v > 175) & pinkish))
     n, lab, st, _ = cv2.connectedComponentsWithStats(face.astype(np.uint8), 8)
     face = np.isin(lab, [i for i in range(1, n) if st[i, 4] >= 25])
     face = cv2.morphologyEx(face.astype(np.uint8), cv2.MORPH_CLOSE,
@@ -45,8 +47,7 @@ def to_yellow(im, areas):
     black = o.max(2) < 70
     rim = near(face, 6) & near(black, 3) & allow & redh & nb & (R > 55) & (G < 0.22 * R + 2)
     # 3) pinkish lips / reflections on the face edges: brighter than any floor pixel
-    gr = G / np.maximum(R, 1)
-    lip = near(face, 6) & allow & redh & nb & (s > 25) & (v > 130) & (gr > 0.36) & (gr < 0.85)  # pink, not floor/gold arc
+    lip = near(face, 6) & allow & redh & nb & pinkish & (s > 25) & (v > 130) & (gr > 0.36) & (gr < 0.85)  # pink, not floor/gold arc
     # 4) deep red shading inside the 3D (almost zero green -- darker floor pixels always carry some), grown from the faces
     deep = allow & redh & nb & (R > 45) & (G < 0.12 * R + 2)
     obj = face | rim | lip
@@ -67,7 +68,26 @@ def to_yellow(im, areas):
     purity = np.clip((0.25 - G / np.maximum(R, 1)) / 0.08, 0, 1) * nb
     m = cv2.GaussianBlur(zone.astype(np.float32), (0, 0), 0.7) * np.where(obj | near(black, 2), 1.0, purity)
     m = m[..., None]
-    return (o * (1 - m) + y * m).clip(0, 255).astype(np.uint8)
+    res = o * (1 - m) + y * m
+    # edges against the floor: treat each edge pixel as  a * face + (1 - a) * floor  and move only the face part
+    # to yellow, so the outline stays as smooth as the original and the floor / gold arc right next to it stay put
+    core = cv2.erode(obj.astype(np.uint8), k3).astype(bool)
+    band = near(obj, 2) & allow & ~core & ~near(black, 1)
+    if band.any():
+        def fill(img, mask):
+            return np.dstack([cv2.inpaint(img[..., c].astype(np.float32), mask.astype(np.uint8), 3, cv2.INPAINT_TELEA)
+                              for c in range(3)])
+        outside_known = ~(near(obj, 2) & allow)
+        Fr = fill(o, ~core & near(obj, 4))                         # original face colour carried out from inside
+        D = fill(y - o, ~core & near(obj, 4))                      # its red -> yellow change
+        B = fill(o, ~outside_known & near(obj, 6))                 # floor colour carried in from outside
+        e = Fr - B
+        a = np.clip(((o - B) * e).sum(2) / np.maximum((e * e).sum(2), 1), 0, 1)
+        a = np.where(band, cv2.GaussianBlur(a.astype(np.float32), (0, 0), 0.6), a)   # soften JPEG stair-steps
+        nw = o + a[..., None] * D
+        nw[..., 1] = np.minimum(nw[..., 1], 0.88 * nw[..., 0])      # never greener than the yellow itself
+        res[band] = nw[band]
+    return res.clip(0, 255).astype(np.uint8)
 
 
 stk = Image.open(STK); stk = stk.crop(stk.getchannel("A").getbbox())
