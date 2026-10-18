@@ -6,8 +6,8 @@ import numpy as np, cv2
 from PIL import Image
 I = sys.argv[1]
 JOBS = {  # src: (name, text box (only bluish pixels inside it change), boxes protected from the ribbon recolour)
-    50: ("mobile-ar-800x1200", (200, 40, 625, 400), [(30, 360, 215, 565), (60, 415, 780, 1060), (230, 30, 570, 60)]),
-    51: ("desktop-ar-1440x300", (900, 30, 1235, 292), [(1235, 20, 1415, 100), (1240, 90, 1405, 235), (40, 30, 835, 255)]),
+    50: ("mobile-ar-800x1200", (200, 40, 625, 400), [(20, 355, 232, 592), (60, 455, 780, 1060), (238, 385, 284, 455), (342, 412, 428, 455), (490, 460, 580, 470)]),
+    51: ("desktop-ar-1440x300", (900, 30, 1235, 292), [(1245, 25, 1405, 68), (1240, 90, 1405, 235), (40, 30, 835, 255)]),
     52: ("mobile-ar-706x320", (440, 135, 640, 318), [(555, 12, 700, 58), (585, 55, 700, 132), (0, 40, 425, 320)]),
     53: ("mobile-ar-800x200", (440, 42, 712, 198), [(680, 5, 800, 52), (705, 52, 800, 150), (0, 25, 455, 200)]),
 }
@@ -43,42 +43,47 @@ for n, (name, (tx0, ty0, tx1, ty1), prot) in JOBS.items():
     h, s, v = [hsvf[..., i].astype(int) for i in range(3)]
     allow = ~digit_full
     for x0, y0, x1, y1 in prot: allow[y0:y1, x0:x1] = False
-    red = (h < 10) | (h > 170)
-    seed = (allow & red & (s > 140) & (v > 140)).astype(np.uint8)
-    zone = cv2.dilate(seed, np.ones((5, 5), np.uint8)) > 0
-    keep = allow & red & ((seed > 0) | (zone & (s > 70) & (v > 60)) | ((s > 30) & (v > 205)))
+    # whole ribbons at once (incl. their pink highlights), so none ends up half red / half yellow
+    redh = (h < 12) | (h > 165)
+    cand = (allow & redh & (s > 25) & (v > 70)).astype(np.uint8)
+    nl, lab, st, _ = cv2.connectedComponentsWithStats(cand, 8)
+    strong = allow & redh & (s > 140) & (v > 140)
+    keep = np.zeros(h.shape, bool)
+    for i in range(1, nl):
+        comp = lab == i
+        if strong[comp].sum() >= 15: keep |= comp
+    keep = cv2.dilate(keep.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool) & allow & redh & (s > 20)
     hsvf[..., 0][keep] = 24
-    hsvf[..., 1][keep] = np.clip(np.maximum(s[keep], 170) * 0.95, 0, 255)
-    hsvf[..., 2][keep] = np.clip(v[keep] * 1.1 + 10, 0, 255)
+    hsvf[..., 1][keep] = np.clip(s[keep] * 1.25 + 60, 0, 235)
+    hsvf[..., 2][keep] = np.clip(v[keep] * 1.05 + 8, 0, 255)
     Image.fromarray(cv2.cvtColor(hsvf, cv2.COLOR_HSV2RGB)).save(f"output/offer-2-final/{name}.png")
 
-# --- vertical banner: the red "Yellow Novmber" sticker -> yellow ribbon/star with dark lettering
-def sticker_to_yellow(path, box):
+# --- vertical banner: replace the hand-made red "Yellow Novmber" sticker with the clean yellow one
+def replace_sticker(path, box, sticker_png, width, at, angle):
     im = np.asarray(Image.open(path).convert("RGB")).copy()
     x0, y0, x1, y1 = box
     reg = im[y0:y1, x0:x1]
-    hsv = cv2.cvtColor(reg, cv2.COLOR_RGB2HSV).astype(int)
-    red = (((hsv[..., 0] < 10) | (hsv[..., 0] > 170)) & (hsv[..., 1] > 90) & (hsv[..., 2] > 80)).astype(np.uint8)
-    nl, lab, st, _ = cv2.connectedComponentsWithStats(red, 8)
-    big = np.zeros(red.shape, np.uint8); small = np.zeros(red.shape, bool)
-    for i in range(1, nl):
-        if st[i, cv2.CC_STAT_AREA] > 400: big[lab == i] = 1
-        elif st[i, cv2.CC_STAT_AREA] > 4: small |= lab == i
-    # white letters inside the red ribbon = holes in the ribbon mask
-    filled = big.copy(); cnts, _ = cv2.findContours(big, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    cv2.drawContours(filled, cnts, -1, 1, -1)
-    holes = (filled > 0) & (big == 0)
-    yellow = np.array([245, 196, 30.]); ink = np.array([25, 25, 25.])
-    shade = (reg.astype(np.float32).max(2) / 255.0)[..., None]
-    out = reg.astype(np.float32)
-    out[big > 0] = (yellow * np.clip(shade * 1.15, 0.75, 1.05))[big > 0]
-    out[holes] = ink
-    out[small] = ink
-    # anti-aliased red fringes left on the letters -> blend toward ink
-    fr = ((hsv[..., 0] < 12) | (hsv[..., 0] > 165)) & (hsv[..., 1] > 35) & (big == 0) & ~holes & ~small
-    a = np.clip((hsv[..., 1] - 35) / 120.0, 0, 1)[..., None]
-    out[fr] = (out * (1 - a) + ink * a)[fr]
-    im[y0:y1, x0:x1] = out.clip(0, 255).astype(np.uint8)
-    Image.fromarray(im).save(path)
+    # wall model: smooth plane fitted to the box border, sticker = pixels that differ from it
+    hh, ww = reg.shape[:2]
+    yy, xx = np.mgrid[0:hh, 0:ww]
+    border = np.zeros((hh, ww), bool); border[:4] = border[-4:] = True; border[:, :4] = border[:, -4:] = True
+    A = np.stack([np.ones(border.sum()), xx[border], yy[border], xx[border] * yy[border]], 1)
+    plane = np.zeros(reg.shape, np.float32)
+    for c in range(3):
+        co = np.linalg.lstsq(A, reg[..., c][border].astype(np.float32), rcond=None)[0]
+        plane[..., c] = co[0] + co[1] * xx + co[2] * yy + co[3] * xx * yy
+    diff = np.abs(reg.astype(np.float32) - plane).sum(2)
+    sm = cv2.dilate((diff > 40).astype(np.uint8), np.ones((11, 11), np.uint8)) > 0
+    sm = cv2.GaussianBlur(sm.astype(np.float32), (0, 0), 3)[..., None]
+    grain = reg.astype(np.float32) - cv2.GaussianBlur(reg.astype(np.float32), (0, 0), 3)
+    reg[:] = (reg * (1 - sm) + (plane + grain * 0.0) * sm).clip(0, 255).astype(np.uint8)
+    m = np.zeros(im.shape[:2], np.uint8)
+    im = cv2.inpaint(im, m, 12, cv2.INPAINT_TELEA)
+    out = Image.fromarray(im)
+    st = Image.open(sticker_png).convert("RGBA")
+    st = st.crop(st.getchannel("A").getbbox())
+    st = st.resize((width, int(st.height * width / st.width)), Image.LANCZOS).rotate(angle, expand=True, resample=Image.BICUBIC)
+    out.paste(st, at, st)
+    out.save(path)
 
-sticker_to_yellow("output/offer-2-final/mobile-ar-800x1200.png", (25, 360, 220, 570))
+replace_sticker("output/offer-2-final/mobile-ar-800x1200.png", (20, 360, 232, 590), "products/sticker-yellow-november.png", 190, (22, 380), 0)
