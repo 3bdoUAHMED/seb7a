@@ -88,17 +88,26 @@ for n, (name, (tx0, ty0, tx1, ty1), prot) in JOBS.items():
         rib = cv2.dilate(rib, np.ones((5, 5), np.uint8)).astype(bool) & allow & ~already_yellow
         # rebuild each ribbon as  alpha * yellow + (1 - alpha) * wall  so the JPEG ringing round the red
         # edges (pale pink rims) can't turn into bright yellow outlines
-        ref = np.maximum(cv2.dilate(rg, np.ones((7, 7), np.uint8)), 50)
-        a = np.clip((rg - 12) / (ref - 12), 0, 1) * rib
-        body = cv2.morphologyEx(((rg > 30) & rib).astype(np.uint8), cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
-        a[cv2.erode(body, np.ones((3, 3), np.uint8)).astype(bool)] = 1      # shiny highlights inside stay ribbon
+        rgs = cv2.GaussianBlur(rg.astype(np.float32), (0, 0), 0.7)                 # tame JPEG noise
+        ref = np.maximum(cv2.dilate(rgs, np.ones((15, 15), np.uint8)), 50)
+        a = np.clip((rgs - 16) / (ref - 16), 0, 1) * rib
+        body = cv2.morphologyEx(((rgs > 22) & rib).astype(np.uint8), cv2.MORPH_CLOSE, np.ones((7, 7), np.uint8))
+        inner = cv2.erode(body, np.ones((3, 3), np.uint8)).astype(bool)
+        a[inner] = 1                                                          # shiny highlights inside stay ribbon
         core = (a > 0.7).astype(np.uint8)
         m = o.copy(); m[..., 1] = o[..., 1] + 0.82 * rg; m[..., 2] = o[..., 2] - 0.35 * rg
         m = m.clip(0, 255).astype(np.uint8)
         fill = (rib & (core == 0)).astype(np.uint8)
         F = cv2.inpaint(m, fill, 3, cv2.INPAINT_TELEA).astype(np.float32)      # ribbon colour carried to the edge
         B = cv2.inpaint(o.astype(np.uint8), cv2.dilate(rib.astype(np.uint8) & (rg > 6).astype(np.uint8), np.ones((3, 3), np.uint8)), 5, cv2.INPAINT_TELEA).astype(np.float32)  # wall behind it
+        Fs = cv2.inpaint(m, ((~inner) & rib).astype(np.uint8), 3, cv2.INPAINT_TELEA).astype(np.float32)  # colour from inside only
+        F = np.where(inner[..., None], F, Fs)                       # edges never brighter than the ribbon body
         y = a[..., None] * F + (1 - a[..., None]) * B
+        deep = cv2.erode(body, np.ones((5, 5), np.uint8)).astype(bool)
+        if deep.any():   # JPEG ringing makes the rim paler than the ribbon itself: cap it to body / wall colour
+            Fd = cv2.inpaint(m, ((~deep) & rib).astype(np.uint8), 3, cv2.INPAINT_TELEA).astype(np.float32)
+            Fd = cv2.dilate(Fd, np.ones((3, 3), np.uint8))
+            y = np.where(deep[..., None], y, np.minimum(y, np.maximum(Fd, B) + 6))
         o[rib] = y[rib]
         Image.fromarray(o.clip(0, 255).astype(np.uint8)).save(f"output/offer-2-final/{name}.png")
         continue
