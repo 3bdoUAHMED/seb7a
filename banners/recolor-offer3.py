@@ -91,7 +91,37 @@ def to_yellow(im, keep, allow_ext):
     nw = np.where(obj[..., None] & (t[..., None] > 0.8), y, nw)
     nw[..., 1] = np.minimum(nw[..., 1], np.maximum(0.86 * nw[..., 0], o[..., 1]))   # no green fringe
     res[band] = nw[band]
-    return res.clip(0, 255).astype(np.uint8), hands_off
+    return res.clip(0, 255).astype(np.uint8), hands_off, obj, a, Fy, B
+
+
+def crisp_word(out, obj, a, Fy, Bw, up=6):
+    """The word "خصم" is small and blocky in the supplied art: redraw it from a smoothed, super-sampled
+    version of its own shape (clean anti-aliased outline), in solid bright yellow, with a soft dark drop
+    shadow so it stands out from the brown wall instead of looking washed out."""
+    nl, lab, st, _ = cv2.connectedComponentsWithStats(obj.astype(np.uint8), 8)
+    if nl < 2: return out
+    i = 1 + int(np.argmax(st[1:, 4]))            # the word is the biggest yellow piece
+    x, y, w, h = st[i, :4]; pad = 8
+    x0, y0 = max(0, x - pad), max(0, y - pad); x1, y1 = min(out.shape[1], x + w + pad), min(out.shape[0], y + h + pad)
+    word = (lab[y0:y1, x0:x1] == i)
+    al = np.where(word, 1.0, 0.0).astype(np.float32)
+    ring = cv2.dilate(word.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool) & ~word
+    al[ring] = a[y0:y1, x0:x1][ring]                                # keep the original soft edge as the guide
+    H, W = al.shape
+    A = cv2.resize(al, (W * up, H * up), interpolation=cv2.INTER_CUBIC)
+    A = cv2.GaussianBlur(A, (0, 0), up * 0.55)
+    A = np.clip((A - 0.38) / 0.24, 0, 1); A = A * A * (3 - 2 * A)    # re-sharpen into a clean outline
+    a2 = cv2.resize(A, (W, H), interpolation=cv2.INTER_AREA)[..., None]
+    sh = cv2.GaussianBlur(np.roll(np.roll(a2[..., 0], 2, 0), 1, 1), (0, 0), 1.3)[..., None]
+    wall = Bw[y0:y1, x0:x1] * (1 - 0.45 * sh)
+    face = Fy[y0:y1, x0:x1].copy()
+    lum = face.mean(2, keepdims=True)
+    face = np.clip(face + (np.array([255, 205, 20], np.float32) - face) * 0.35 * (lum > 140), 0, 255)  # richer yellow
+    reg = out[y0:y1, x0:x1]
+    zone = cv2.dilate(((a2[..., 0] > 0.01) | (sh[..., 0] > 0.02) | word).astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
+    comp = wall * (1 - a2) + face * a2
+    reg[zone] = comp[zone]
+    return out
 
 
 os.makedirs("output/offer-3-final", exist_ok=True)
@@ -123,7 +153,7 @@ for n, (name, skip) in JOBS.items():
         ribs |= np.isin(lab, [i for i in range(1, nl) if st[i, 4] >= 30])
     keep |= ribs
     ext = (allow | keep | cv2.dilate(ribs.astype(np.uint8), np.ones((9, 9), np.uint8)).astype(bool))
-    out, hands_off = to_yellow(im, keep, allow_ext=ext)
+    out, hands_off, obj, a, Fy, Bw = to_yellow(im, keep, allow_ext=ext)
     out = out.astype(np.float32)
     # ribbons crossing a product are only a few pixels wide: recolour them softly, each pixel by how much
     # "ribbon red" it holds (B ~ G and R >> G) -- the magenta label (B well above G) gets weight 0
@@ -135,4 +165,5 @@ for n, (name, skip) in JOBS.items():
         reg &= cv2.dilate((t > 0.5).astype(np.uint8) & reg.astype(np.uint8), np.ones((7, 7), np.uint8)).astype(bool)
         out[reg] = soft[reg]
     out[hands_off] = of[hands_off]
+    out = crisp_word(out, obj, a, Fy, Bw)
     Image.fromarray(out.clip(0, 255).astype(np.uint8)).save(f"output/offer-3-final/{name}.png")
