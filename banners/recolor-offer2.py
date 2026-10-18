@@ -74,8 +74,8 @@ for n, (name, (tx0, ty0, tx1, ty1), prot) in JOBS.items():
         dark_red = allow & redh & (s > 60) & (v > 45)
         for _ in range(12): keep |= cv2.dilate(keep.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool) & dark_red
     keep = cv2.dilate(keep.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool) & allow & redh & (s > 20)
-    if EN:
-        # EN: shift red -> yellow by "redness" (R-G), so soft edges, pink highlights and dark folds all follow
+    if True:
+        # shift red -> yellow by "redness" (R-G), so soft edges, pink highlights and dark folds all follow
         # smoothly and the wall around a ribbon (R~G) is left as is -- no halo, no half-red tips
         o = out.clip(0, 255)
         rg = np.clip(o[..., 0] - o[..., 1], 0, None)
@@ -86,9 +86,19 @@ for n, (name, (tx0, ty0, tx1, ty1), prot) in JOBS.items():
             if st[i, 4] >= 12: rib[lab == i] = 1
         already_yellow = (h >= 13) & (h <= 40) & (s > 60)    # sticker / star stay their own gold
         rib = cv2.dilate(rib, np.ones((5, 5), np.uint8)).astype(bool) & allow & ~already_yellow
-        y = o.copy()
-        y[..., 1] = o[..., 1] + 0.82 * rg
-        y[..., 2] = o[..., 2] - 0.35 * rg
+        # rebuild each ribbon as  alpha * yellow + (1 - alpha) * wall  so the JPEG ringing round the red
+        # edges (pale pink rims) can't turn into bright yellow outlines
+        ref = np.maximum(cv2.dilate(rg, np.ones((7, 7), np.uint8)), 50)
+        a = np.clip((rg - 12) / (ref - 12), 0, 1) * rib
+        body = cv2.morphologyEx(((rg > 30) & rib).astype(np.uint8), cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
+        a[cv2.erode(body, np.ones((3, 3), np.uint8)).astype(bool)] = 1      # shiny highlights inside stay ribbon
+        core = (a > 0.7).astype(np.uint8)
+        m = o.copy(); m[..., 1] = o[..., 1] + 0.82 * rg; m[..., 2] = o[..., 2] - 0.35 * rg
+        m = m.clip(0, 255).astype(np.uint8)
+        fill = (rib & (core == 0)).astype(np.uint8)
+        F = cv2.inpaint(m, fill, 3, cv2.INPAINT_TELEA).astype(np.float32)      # ribbon colour carried to the edge
+        B = cv2.inpaint(o.astype(np.uint8), cv2.dilate(rib.astype(np.uint8) & (rg > 6).astype(np.uint8), np.ones((3, 3), np.uint8)), 5, cv2.INPAINT_TELEA).astype(np.float32)  # wall behind it
+        y = a[..., None] * F + (1 - a[..., None]) * B
         o[rib] = y[rib]
         Image.fromarray(o.clip(0, 255).astype(np.uint8)).save(f"output/offer-2-final/{name}.png")
         continue
