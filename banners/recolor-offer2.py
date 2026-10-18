@@ -14,7 +14,7 @@ JOBS = {  # src: (name, text box (only bluish pixels inside it change), boxes pr
 JOBS_EN = {  # English versions: same treatment, "SPECIAL OFFER" and the FREE ribbon keep their red
     60: ("mobile-en-800x1200", (195, 90, 610, 380), [(20, 360, 232, 592), (60, 455, 780, 1060), (238, 385, 284, 455), (342, 412, 428, 455)]),
     61: ("desktop-en-1440x300", (185, 110, 435, 290), [(35, 20, 195, 70), (45, 90, 160, 200), (610, 0, 1440, 300)]),
-    62: ("mobile-en-706x320", (55, 140, 250, 265), [(15, 15, 145, 52), (30, 70, 102, 142), (270, 70, 706, 320)]),
+    62: ("mobile-en-706x320", (55, 140, 250, 265), [(15, 15, 145, 52), (278, 70, 706, 320)]),
     63: ("mobile-en-800x200", (125, 40, 365, 180), [(0, 0, 110, 40), (20, 62, 90, 127), (365, 30, 800, 200)]),
 }
 EN = len(sys.argv) > 2 and sys.argv[2] == "en"
@@ -74,6 +74,24 @@ for n, (name, (tx0, ty0, tx1, ty1), prot) in JOBS.items():
         dark_red = allow & redh & (s > 60) & (v > 45)
         for _ in range(12): keep |= cv2.dilate(keep.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool) & dark_red
     keep = cv2.dilate(keep.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool) & allow & redh & (s > 20)
+    if EN:
+        # EN: shift red -> yellow by "redness" (R-G), so soft edges, pink highlights and dark folds all follow
+        # smoothly and the wall around a ribbon (R~G) is left as is -- no halo, no half-red tips
+        o = out.clip(0, 255)
+        rg = np.clip(o[..., 0] - o[..., 1], 0, None)
+        cand = (allow & (rg > 35) & ~((h >= 13) & (h <= 40) & (s > 60))).astype(np.uint8)
+        nl, lab, st, _ = cv2.connectedComponentsWithStats(cand, 8)
+        rib = np.zeros(rg.shape, np.uint8)
+        for i in range(1, nl):
+            if st[i, 4] >= 12: rib[lab == i] = 1
+        already_yellow = (h >= 13) & (h <= 40) & (s > 60)    # sticker / star stay their own gold
+        rib = cv2.dilate(rib, np.ones((5, 5), np.uint8)).astype(bool) & allow & ~already_yellow
+        y = o.copy()
+        y[..., 1] = o[..., 1] + 0.82 * rg
+        y[..., 2] = o[..., 2] - 0.35 * rg
+        o[rib] = y[rib]
+        Image.fromarray(o.clip(0, 255).astype(np.uint8)).save(f"output/offer-2-final/{name}.png")
+        continue
     hsvf[..., 0][keep] = 24
     hsvf[..., 1][keep] = np.clip(s[keep] * 1.25 + 60, 0, 235)
     hsvf[..., 2][keep] = np.clip(v[keep] * 1.05 + 8, 0, 255)
