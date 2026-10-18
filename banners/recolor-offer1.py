@@ -30,28 +30,42 @@ def to_yellow(im, areas):
     allow = np.zeros(h.shape, bool)
     for x0, y0, x1, y1 in areas: allow[y0:y1, x0:x1] = True
     redh = (h < 12) | (h > 165)
-    # the object = pure reds (faces, bevels, rims: almost no green) -- the burgundy floor carries more green
     R, G = o[..., 0], o[..., 1]
-    # (bright shiny / pale pink parts are object too: the floor never gets that bright)
-    obj = allow & redh & (((R > 55) & (G < 0.22 * R + 2)) | ((s > 15) & (v > 175)))
-    n, lab, st, _ = cv2.connectedComponentsWithStats(obj.astype(np.uint8), 8)
-    obj = np.isin(lab, [i for i in range(1, n) if st[i, 4] >= 25])           # drop stray specks
-    zone = cv2.dilate(obj.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool) & allow   # + soft edge pixels
+    nb = (o[..., 2] - G) < 7          # the burgundy floor (even its bright glow) has a blue tint (B > G); the 3D red doesn't
+    k3 = np.ones((3, 3), np.uint8)
+    def near(mask, r):
+        return cv2.dilate(mask.astype(np.uint8), np.ones((2 * r + 1, 2 * r + 1), np.uint8)).astype(bool)
+    # 1) the lit faces of the 3D number / squiggles: bright and strongly red
+    face = allow & redh & nb & (((s > 140) & (v > 150)) | ((s > 15) & (v > 175)))
+    n, lab, st, _ = cv2.connectedComponentsWithStats(face.astype(np.uint8), 8)
+    face = np.isin(lab, [i for i in range(1, n) if st[i, 4] >= 25])
+    face = cv2.morphologyEx(face.astype(np.uint8), cv2.MORPH_CLOSE,
+                            cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))).astype(bool) & allow
+    # 2) the darker red rims where a face turns into its black side (must touch that black side)
+    black = o.max(2) < 70
+    rim = near(face, 6) & near(black, 3) & allow & redh & nb & (R > 55) & (G < 0.22 * R + 2)
+    # 3) pinkish lips / reflections on the face edges: brighter than any floor pixel
+    gr = G / np.maximum(R, 1)
+    lip = near(face, 6) & allow & redh & nb & (s > 25) & (v > 130) & (gr > 0.36) & (gr < 0.85)  # pink, not floor/gold arc
+    # 4) deep red shading inside the 3D (almost zero green -- darker floor pixels always carry some), grown from the faces
+    deep = allow & redh & nb & (R > 45) & (G < 0.12 * R + 2)
+    obj = face | rim | lip
+    for _ in range(25): obj = obj | (cv2.dilate(obj.astype(np.uint8), k3).astype(bool) & deep)
+    # 5) small red reflections / lines enclosed by the number's own body
+    hull = cv2.morphologyEx(obj.astype(np.uint8), cv2.MORPH_CLOSE,
+                            cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (11, 11))).astype(bool)
+    obj |= hull & allow & redh & nb & (s > 60) & (v > 50) & (G < 0.3 * R)
+    obj = cv2.morphologyEx(obj.astype(np.uint8), cv2.MORPH_CLOSE, k3).astype(bool) & allow
+    zone = near(obj, 1) & allow                                   # + 1px of soft edge
     # red -> yellow by "redness" (R - G): every pixel keeps its own brightness, highlight and edge blend
     rg = np.clip(o[..., 0] - np.maximum(o[..., 1], o[..., 2] * 0.9), 0, None)
     y = o.copy()
     y[..., 0] = o[..., 0] + 0.06 * rg
     y[..., 1] = o[..., 1] + 0.80 * rg
     y[..., 2] = o[..., 2] - 0.30 * rg
-    # edge pixels next to the floor change only as much as they are "pure red", so no glow on the floor
-    purity = np.clip((0.34 - G / np.maximum(R, 1)) / 0.12, 0, 1)
-    dark = o.max(2) < 70                                       # black/grey 3D sides
-    side = cv2.dilate(dark.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
-    # pinkish lips on the face edges: unlike the floor they have no blue tint (B - G ~ 0)
-    lip = cv2.dilate(obj.astype(np.uint8), np.ones((9, 9), np.uint8)).astype(bool) & allow & redh & (s > 40) \
-        & (o[..., 2] - o[..., 1] < 5)
-    obj = obj | lip; zone = zone | lip
-    m = cv2.GaussianBlur(zone.astype(np.float32), (0, 0), 0.8) * np.where(obj | side, 1.0, purity)
+    # soft edge pixels change only as much as they are "pure red", so the floor around gets no glow
+    purity = np.clip((0.25 - G / np.maximum(R, 1)) / 0.08, 0, 1) * nb
+    m = cv2.GaussianBlur(zone.astype(np.float32), (0, 0), 0.7) * np.where(obj | near(black, 2), 1.0, purity)
     m = m[..., None]
     return (o * (1 - m) + y * m).clip(0, 255).astype(np.uint8)
 
